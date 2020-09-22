@@ -1,19 +1,8 @@
 package com.aedyl.domain.fighter;
 
-public class Characteristics {
-	public final int initiative;
-	public final int strength;
-	public final long maxLife;
-	public long life;
+public record Characteristics(int initiative, int maxLife, int life, int strength) {
 
-	public Characteristics(int initiative, int maxLife, int strength) {
-		this.initiative = initiative;
-		this.maxLife = maxLife;
-		this.strength = strength;
-		this.life = maxLife;
-	}
-
-	public void decreaseLife(long lifeToRemove) {
-		this.life = this.life - lifeToRemove;
+	public Characteristics decreaseLife(int lifeToRemove) {
+		return new Characteristics(initiative, maxLife, life - lifeToRemove, strength);
 	}
 }

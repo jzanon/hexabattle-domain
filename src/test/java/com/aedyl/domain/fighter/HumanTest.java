@@ -32,22 +32,22 @@ class HumanTest {
 	void testEqualsDependsOnID() {
 		Human human = randomHumanSupplier.get();
 
-		Human humanCloned = new Human(human.uniqueId, human.name, human.characteristics);
+		Human humanCloned = new Human(human.uniqueId(), human.name(), human.characteristics());
 		assertEquals(human, humanCloned);
 
-		Human humanWithSameId = new Human(human.uniqueId, "Another name", randomCharacteristicsSupplier.get());
+		Human humanWithSameId = new Human(human.uniqueId(), "Another name", randomCharacteristicsSupplier.get());
 		assertEquals(human, humanWithSameId);
 
-		Human humanWithDifferentId = new Human(UUID.randomUUID(), human.name, human.characteristics);
+		Human humanWithDifferentId = new Human(UUID.randomUUID(), human.name(), human.characteristics());
 		assertNotEquals(human, humanWithDifferentId);
 	}
 
 	@Test
 	void isAlive() {
-		Human human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 9));
+		Human human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 7, 9));
 		assertTrue(human.isAlive());
 
-		human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 0, 9));
+		human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9));
 		assertFalse(human.isAlive());
 	}
 
@@ -78,33 +78,39 @@ class HumanTest {
 		assertFalse(potentialEnemy.isPresent());
 	}
 
-
+	/**
+	 * FLAKY due to Random
+	 */
 	@ParameterizedTest
 	@ValueSource(ints = {1, 3, 5, -3, 15, Integer.MAX_VALUE})
 	void fightSuccess(int attackValue) {
-		HumanForTest me = new HumanForTest(randomHumanSupplier.get());
+		final Human me = randomHumanSupplier.get();
 		Human enemy = randomHumanSupplier.get();
-		me.setAttackValue(attackValue);
 		final CombatStatistics statistics = me.fight(enemy);
 
-		assertEquals(me, statistics.assailant);
-		assertEquals(CombatStatus.SUCCESS, statistics.status);
-		assertEquals(attackValue, statistics.hit);
-		assertEquals(enemy, statistics.defender);
-		assertEquals(enemy.characteristics.maxLife - attackValue, enemy.characteristics.life);
+		assertEquals(me, statistics.assailant());
+		assertEquals(CombatStatus.SUCCESS, statistics.status());
+		assertEquals(attackValue, statistics.hit());
+		assertEquals(enemy.uniqueId(), statistics.defender().uniqueId());
+		assertEquals(enemy.uniqueId(), statistics.defender().uniqueId());
+		assertEquals(enemy.characteristics().life(), statistics.defender().characteristics().life());
+		assertEquals(enemy.characteristics().life() - attackValue, statistics.defender().characteristics().life());
 	}
 
+	/**
+	 * FLAKY due to Random
+	 */
 	@Test
 	void fightMissed() {
-		HumanForTest me = new HumanForTest(randomHumanSupplier.get());
+		final Human me = randomHumanSupplier.get();
 		Human enemy = randomHumanSupplier.get();
-		me.setAttackValue(0);
 		final CombatStatistics statistics = me.fight(enemy);
 
-		assertEquals(me, statistics.assailant);
-		assertEquals(CombatStatus.MISSED, statistics.status);
-		assertEquals(0, statistics.hit);
-		assertEquals(enemy, statistics.defender);
-		assertEquals(enemy.characteristics.maxLife, enemy.characteristics.life);
+		assertEquals(me, statistics.assailant());
+		assertEquals(CombatStatus.MISSED, statistics.status());
+		assertEquals(0, statistics.hit());
+		assertEquals(enemy, statistics.defender());
+		assertEquals(enemy.uniqueId(), statistics.defender().uniqueId());
+		assertEquals(enemy.characteristics().life(), statistics.defender().characteristics().life());
 	}
 }

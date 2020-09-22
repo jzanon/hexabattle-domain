@@ -14,9 +14,11 @@ public class CharacteristicsSupplier implements Supplier<Characteristics> {
 		Supplier<Integer> randomInitiative = () -> numberSupplier.numberBetween(1, 20);
 		Supplier<Integer> randomMaxLife = () -> numberSupplier.numberBetween(1, 20);
 		Supplier<Integer> randomStrength = () -> numberSupplier.numberBetween(1, 20);
+		final Integer maxLife = randomMaxLife.get();
 		return new Characteristics(
 				randomInitiative.get(),
-				randomMaxLife.get(),
+				maxLife,
+				maxLife,
 				randomStrength.get()
 		);
 	}

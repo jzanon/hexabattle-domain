@@ -2,18 +2,11 @@ package com.aedyl.domain.combat;
 
 import com.aedyl.domain.fighter.Human;
 
-public class CombatStatistics {
-	public final CombatStatus status;
-	public final Human assailant;
-	public final Human defender;
-	public final Integer hit;
+public record CombatStatistics(CombatStatus status,
+                               Human assailant,
+                               Human defender,
+                               Integer hit) {
 
-	public CombatStatistics(CombatStatus status, Human assailant, Human defender, Integer hit) {
-		this.status = status;
-		this.assailant = assailant;
-		this.defender = defender;
-		this.hit = hit;
-	}
 
 	public String getConsequenceOnDefender() {
 		if (defender == null) {
@@ -21,27 +14,27 @@ public class CombatStatistics {
 		}
 		String consequenceOnDefender;
 		if (defender.isAlive()) {
-			consequenceOnDefender = String.format("%s's life: %s/%s", defender.name,
-					defender.characteristics.life,
-					defender.characteristics.maxLife);
+			consequenceOnDefender = String.format("%s's life: %s/%s", defender.name(),
+					defender.characteristics().life(),
+					defender.characteristics().maxLife());
 		} else {
-			consequenceOnDefender = String.format("%s is dead", defender.name);
+			consequenceOnDefender = String.format("%s is dead", defender.name());
 		}
 		return consequenceOnDefender;
 	}
 
 	public String buildSummary() {
-		final String name = assailant.name;
+		final String name = assailant.name();
 		switch (status) {
 			case SUCCESS -> {
 				String consequenceOnDefender = getConsequenceOnDefender();
-				return String.format("%s hit %s : %s damages. %s", name, defender.name, hit, consequenceOnDefender);
+				return String.format("%s hit %s : %s damages. %s", name, defender.name(), hit, consequenceOnDefender);
 			}
 			case NO_ENEMY_FOUND -> {
 				return String.format("%s did not found enemy", name);
 			}
 			case MISSED -> {
-				return String.format("%s missed %s", name, defender.name);
+				return String.format("%s missed %s", name, defender.name());
 			}
 			default -> throw new IllegalStateException("Combat status not managed: " + status);
 		}

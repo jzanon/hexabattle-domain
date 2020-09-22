@@ -24,11 +24,11 @@ public class Game {
 
 		Arena arena = setupArena(numberOfFighter);
 
-		//arena.getSurvivors().forEach(fighter -> logger.info("Fighter: {}", fighter));
+		arena.getSurvivors().forEach(fighter -> logger.info("Fighter: {}", fighter));
 
 		arena.fight(15);
 
-	//	logResults(arena);
+		logResults(arena);
 	}
 
 	private void logResults(Arena arena) {
@@ -39,7 +39,7 @@ public class Game {
 				.forEach(logger::info);
 
 		final List<String> winners = arena.getSurvivors().stream()
-				.map(human -> human.name)
+				.map(human -> human.name())
 				.collect(Collectors.toList());
 		if (winners.size() == 1) {
 			logger.info("At then end of round {}, the winner is: {}", rounds.size(), winners);

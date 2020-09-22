@@ -8,8 +8,8 @@ class CharacteristicsTest {
 
 	@Test
 	void decreaseLife() {
-		Characteristics characteristics = new Characteristics(5, 7, 9);
-		characteristics.decreaseLife(3);
-		assertEquals(4, characteristics.life);
+		Characteristics characteristics = new Characteristics(5, 7, 7, 9);
+		Characteristics updateCharacteristics = characteristics.decreaseLife(3);
+		assertEquals(4, updateCharacteristics.life());
 	}
 }
