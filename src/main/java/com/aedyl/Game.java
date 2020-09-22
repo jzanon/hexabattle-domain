@@ -6,7 +6,6 @@ import com.aedyl.domain.fighter.Characteristics;
 import com.aedyl.domain.fighter.CharacteristicsSupplier;
 import com.aedyl.domain.fighter.Human;
 import com.aedyl.domain.fighter.HumanSupplier;
-import org.openjdk.jmh.annotations.Benchmark;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +17,6 @@ import java.util.stream.IntStream;
 public class Game {
 	private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
-	@Benchmark
 	public void launch() {
 		int numberOfFighter = 100;
 
