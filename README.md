@@ -1,3 +1,5 @@
+![Maven build](https://github.com/jzanon/jdk15-test/workflows/Maven%20build/badge.svg)
+
 # Application template to play with Java features
 
 ## JMH & JDK 15
