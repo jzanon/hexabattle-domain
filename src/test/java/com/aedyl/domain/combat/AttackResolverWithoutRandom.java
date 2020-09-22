@@ -12,7 +12,7 @@ public class AttackResolverWithoutRandom extends AttackResolver {
 	}
 
 	@Override
-	int getAttackPower(Human attacker) {
+	public int getAttackPower(Human attacker) {
 		return attackPower;
 	}
 }
