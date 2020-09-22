@@ -1,7 +1,6 @@
-package com.aedyl.domain.fighter;
+package com.aedyl.domain.combat;
 
-import com.aedyl.domain.combat.CombatStatistics;
-import com.aedyl.domain.combat.CombatStatus;
+import com.aedyl.domain.fighter.Human;
 
 import java.util.Random;
 
@@ -21,7 +20,7 @@ public class AttackResolver {
 		return new CombatStatistics(CombatStatus.SUCCESS, attacker, enemyAfterFight, hit);
 	}
 
-	int getAttackPower(Human attacker) {
+	public int getAttackPower(Human attacker) {
 		return random.nextInt(attacker.characteristics().strength());
 	}
 }

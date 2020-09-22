@@ -1,5 +1,6 @@
 package com.aedyl.domain.fighter;
 
+import com.aedyl.domain.combat.AttackResolver;
 import com.aedyl.domain.combat.CombatStatistics;
 import com.aedyl.domain.combat.CombatStatus;
 

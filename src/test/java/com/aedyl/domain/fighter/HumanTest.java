@@ -1,5 +1,6 @@
 package com.aedyl.domain.fighter;
 
+import com.aedyl.domain.combat.AttackResolver;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

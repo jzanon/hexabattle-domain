@@ -1,7 +1,6 @@
-package com.aedyl.domain.fighter;
+package com.aedyl.domain.combat;
 
-import com.aedyl.domain.combat.CombatStatistics;
-import com.aedyl.domain.combat.CombatStatus;
+import com.aedyl.domain.fighter.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,5 +1,9 @@
 package com.aedyl.domain.fighter;
 
+import com.aedyl.domain.fighter.CharacteristicsSupplier;
+import com.aedyl.domain.fighter.EnemyChooser;
+import com.aedyl.domain.fighter.Human;
+import com.aedyl.domain.fighter.HumanSupplier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

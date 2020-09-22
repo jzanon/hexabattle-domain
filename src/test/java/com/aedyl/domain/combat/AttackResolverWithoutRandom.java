@@ -1,4 +1,7 @@
-package com.aedyl.domain.fighter;
+package com.aedyl.domain.combat;
+
+import com.aedyl.domain.combat.AttackResolver;
+import com.aedyl.domain.fighter.Human;
 
 public class AttackResolverWithoutRandom extends AttackResolver {
 

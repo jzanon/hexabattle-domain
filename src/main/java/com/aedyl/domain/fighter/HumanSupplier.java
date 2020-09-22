@@ -1,5 +1,6 @@
 package com.aedyl.domain.fighter;
 
+import com.aedyl.domain.combat.AttackResolver;
 import com.github.javafaker.Ancient;
 import com.github.javafaker.Faker;
 
