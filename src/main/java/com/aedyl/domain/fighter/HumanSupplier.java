@@ -21,7 +21,9 @@ public class HumanSupplier implements Supplier<Human> {
 		return new Human(
 				UUID.randomUUID(),
 				nameSupplier.hero(),
-				characteristicsSupplier.get()
+				characteristicsSupplier.get(),
+				new EnemyChooser(),
+				new AttackResolver()
 		);
 	}
 }
