@@ -1,12 +1,12 @@
 package com.aedyl.domain.fighter;
 
+import com.aedyl.domain.characteristics.Characteristics;
+import com.aedyl.domain.characteristics.Trait;
 import com.aedyl.domain.combat.AttackResolver;
 import com.aedyl.domain.combat.AttackResult;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Human {
 
@@ -44,7 +44,8 @@ public class Human {
 	@Override
 	public String toString() {
 		return "Human{" +
-				"name='" + name + '}';
+				"name='" + name +
+				"', traits='" + characteristics.traits().stream().map(Trait::name).collect(Collectors.joining(",","","")) + "'}";
 	}
 
 	public boolean isAlive() {
@@ -77,5 +78,8 @@ public class Human {
 		return characteristics;
 	}
 
+	public boolean is(Trait trait) {
+		return characteristics.traits().contains(trait);
+	}
 }
 

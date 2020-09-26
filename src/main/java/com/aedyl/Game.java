@@ -2,8 +2,8 @@ package com.aedyl;
 
 import com.aedyl.domain.Arena;
 import com.aedyl.domain.combat.Round;
-import com.aedyl.domain.fighter.Characteristics;
-import com.aedyl.domain.fighter.CharacteristicsSupplier;
+import com.aedyl.domain.characteristics.Characteristics;
+import com.aedyl.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.domain.fighter.Human;
 import com.aedyl.domain.fighter.HumanSupplier;
 import org.slf4j.Logger;
