@@ -1,9 +1,10 @@
 package com.aedyl.domain;
 
-import com.aedyl.domain.combat.CombatStatistics;
-import com.aedyl.domain.combat.CombatStatus;
+import com.aedyl.domain.combat.AttackResult;
+import com.aedyl.domain.combat.AttackStatus;
 import com.aedyl.domain.combat.Round;
 import com.aedyl.domain.fighter.Human;
+import com.aedyl.domain.fighter.HumanComparator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,8 @@ public class Arena {
 
 			final List<Human> survivorsInsideRound = new ArrayList<>(survivors);
 
-			final List<CombatStatistics> statistics = survivors.stream()
-					.sorted((x, y) -> Integer.compare(y.characteristics().initiative(), x.characteristics().initiative()))
+			final List<AttackResult> statistics = survivors.stream()
+					.sorted(HumanComparator::compareByInitiative)
 					.filter(survivorsInsideRound::contains)
 					.map(human -> human.fight(survivorsInsideRound))
 					.peek(combatStatistics -> updateSurvivorsInsideRound(survivorsInsideRound, combatStatistics))
@@ -41,11 +42,11 @@ public class Arena {
 
 	}
 
-	private void updateSurvivorsInsideRound(List<Human> survivorsInsideRound, CombatStatistics combatStatistics) {
-		if (combatStatistics.status().equals(CombatStatus.SUCCESS)) {
-			survivorsInsideRound.remove(combatStatistics.defender());
-			if (combatStatistics.defender().isAlive()) {
-				survivorsInsideRound.add(combatStatistics.defender());
+	private void updateSurvivorsInsideRound(List<Human> survivorsInsideRound, AttackResult attackResult) {
+		if (attackResult.status().equals(AttackStatus.SUCCESS)) {
+			survivorsInsideRound.remove(attackResult.defender());
+			if (attackResult.defender().isAlive()) {
+				survivorsInsideRound.add(attackResult.defender());
 			}
 		}
 	}

@@ -25,13 +25,13 @@ class HumanTest {
 		Human human = randomHumanSupplier.get();
 
 		final EnemyChooser enemyChooser = new EnemyChooser();
-		Human humanCloned = new Human(human.uniqueId(), human.name(), human.characteristics(), enemyChooser, new AttackResolver());
+		Human humanCloned = new Human(human.uniqueId, human.name, human.getCharacteristics(), enemyChooser, new AttackResolver());
 		assertEquals(human, humanCloned);
 
-		Human humanWithSameId = new Human(human.uniqueId(), "Another name", randomCharacteristicsSupplier.get(), enemyChooser, new AttackResolver());
+		Human humanWithSameId = new Human(human.uniqueId, "Another name", randomCharacteristicsSupplier.get(), enemyChooser, new AttackResolver());
 		assertEquals(human, humanWithSameId);
 
-		Human humanWithDifferentId = new Human(UUID.randomUUID(), human.name(), human.characteristics(), enemyChooser, new AttackResolver());
+		Human humanWithDifferentId = new Human(UUID.randomUUID(), human.name, human.getCharacteristics(), enemyChooser, new AttackResolver());
 		assertNotEquals(human, humanWithDifferentId);
 	}
 

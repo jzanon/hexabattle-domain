@@ -37,7 +37,7 @@ public class Game {
 				.forEach(logger::info);
 
 		final List<String> winners = arena.getSurvivors().stream()
-				.map(human -> human.name())
+				.map(human -> human.name)
 				.collect(Collectors.toList());
 		if (winners.size() == 1) {
 			logger.info("At then end of round {}, the winner is: {}", rounds.size(), winners);

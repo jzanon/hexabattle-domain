@@ -1,6 +1,6 @@
 package com.aedyl.domain.combat;
 
-public enum CombatStatus {
+public enum AttackStatus {
 	SUCCESS,
 	NO_ENEMY_FOUND,
 	MISSED

@@ -30,14 +30,15 @@ class AttackResolverTest {
 
 		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9), new EnemyChooser(), attackResolver);
 		Human enemy = randomHumanSupplier.get();
+		final int initialLifeOfEnemy = enemy.getCharacteristics().life();
 
-		final CombatStatistics statistics = me.fight(enemy);
+		final AttackResult statistics = me.fight(enemy);
 
 		assertEquals(me, statistics.assailant());
-		assertEquals(CombatStatus.SUCCESS, statistics.status());
+		assertEquals(AttackStatus.SUCCESS, statistics.status());
 		assertEquals(attackValue, statistics.hit());
-		assertEquals(enemy.uniqueId(), statistics.defender().uniqueId());
-		assertEquals(enemy.characteristics().life() - attackValue, statistics.defender().characteristics().life());
+		assertEquals(enemy.uniqueId, statistics.defender().uniqueId);
+		assertEquals(initialLifeOfEnemy - attackValue, statistics.defender().getCharacteristics().life());
 	}
 
 	/**
@@ -50,14 +51,14 @@ class AttackResolverTest {
 
 		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9), new EnemyChooser(), attackResolver);
 		Human enemy = randomHumanSupplier.get();
-		final CombatStatistics statistics = me.fight(enemy);
+		final AttackResult statistics = me.fight(enemy);
 
 		assertEquals(me, statistics.assailant());
-		assertEquals(CombatStatus.MISSED, statistics.status());
+		assertEquals(AttackStatus.MISSED, statistics.status());
 		assertEquals(0, statistics.hit());
 		assertEquals(enemy, statistics.defender());
-		assertEquals(enemy.uniqueId(), statistics.defender().uniqueId());
-		assertEquals(enemy.characteristics().life(), statistics.defender().characteristics().life());
+		assertEquals(enemy.uniqueId, statistics.defender().uniqueId);
+		assertEquals(enemy.getCharacteristics().life(), statistics.defender().getCharacteristics().life());
 	}
 
 
