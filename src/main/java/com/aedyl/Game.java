@@ -18,13 +18,14 @@ public class Game {
 	private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
 	public void launch() {
-		int numberOfFighter = 100;
+		final int numberOfFighter = 100;
+		final int numberMaxOfRound = 15;
 
 		Arena arena = setupArena(numberOfFighter);
 
 		arena.getSurvivors().forEach(fighter -> logger.info("Fighter: {}", fighter));
 
-		arena.fight(15);
+		arena.fight(numberMaxOfRound);
 
 		logResults(arena);
 	}

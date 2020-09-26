@@ -1,7 +1,6 @@
 package com.aedyl.domain;
 
 import com.aedyl.domain.combat.AttackResult;
-import com.aedyl.domain.combat.AttackStatus;
 import com.aedyl.domain.combat.Round;
 import com.aedyl.domain.fighter.Human;
 import com.aedyl.domain.fighter.HumanComparator;
@@ -14,41 +13,28 @@ public class Arena {
 
 	private List<Human> survivors;
 	private final List<Round> rounds = new ArrayList<>();
+	private int currentRoundIndex = 0;
 
 	public Arena(List<Human> fighters) {
 		this.survivors = new ArrayList<>(fighters);
 	}
 
-	public void fight(int numberMaxOfRound) {
-		int currentRoundIndex = 0;
+	public void fight(int numberOfRoundLimit) {
 
-
-		while (survivors.size() > 1 && currentRoundIndex <= numberMaxOfRound) {
+		while (survivors.size() > 1 && currentRoundIndex <= numberOfRoundLimit) {
 			currentRoundIndex++;
-
-			final List<Human> survivorsInsideRound = new ArrayList<>(survivors);
-
-			final List<AttackResult> statistics = survivors.stream()
+			final List<AttackResult> attackResults = survivors.stream()
+					.filter(Human::isAlive)
 					.sorted(HumanComparator::compareByInitiative)
-					.filter(survivorsInsideRound::contains)
-					.map(human -> human.fight(survivorsInsideRound))
-					.peek(combatStatistics -> updateSurvivorsInsideRound(survivorsInsideRound, combatStatistics))
+					.map(human -> human.fight(survivors))
 					.collect(Collectors.toList());
 
-			survivors = survivorsInsideRound;
+			// reduce size of survivor list to avoid useless iteration
+			survivors = survivors.stream().filter(Human::isAlive).collect(Collectors.toList());
 
-			rounds.add(new Round(currentRoundIndex, statistics));
+			rounds.add(new Round(currentRoundIndex, attackResults));
 		}
 
-	}
-
-	private void updateSurvivorsInsideRound(List<Human> survivorsInsideRound, AttackResult attackResult) {
-		if (attackResult.status().equals(AttackStatus.SUCCESS)) {
-			survivorsInsideRound.remove(attackResult.defender());
-			if (attackResult.defender().isAlive()) {
-				survivorsInsideRound.add(attackResult.defender());
-			}
-		}
 	}
 
 	public List<Round> getRounds() {

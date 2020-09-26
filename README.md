@@ -8,5 +8,5 @@ Branch **jmh-template**: Playing with Java 15 and observe performance impact wit
 
 ## Java 15: Records
 
-[Java 15 Records](https://openjdk.java.net/jeps/359) used (over-used?)
+[Java 15 Records](https://openjdk.java.net/jeps/359) tested 
 
