@@ -4,26 +4,53 @@ import com.github.javafaker.Faker;
 import com.github.javafaker.Number;
 import com.github.javafaker.Options;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class CharacteristicsSupplier implements Supplier<Characteristics> {
-	private final Faker faker = Faker.instance();
+	private Supplier<Traits> traitSupplier;
+	private Supplier<Integer> initiativeSupplier;
+	private Supplier<Integer> lifeSupplier;
+	private Supplier<Integer> strengthSupplier;
+
+	public CharacteristicsSupplier() {
+		Faker faker = Faker.instance();
+		Options option = faker.options();
+		Number numberSupplier = faker.number();
+		initiativeSupplier = () -> numberSupplier.numberBetween(1, 20);
+		lifeSupplier = () -> numberSupplier.numberBetween(1, 20);
+		strengthSupplier = () -> numberSupplier.numberBetween(1, 20);
+		traitSupplier = () -> Traits.of(option.option(Trait.class));
+	}
 
 	@Override
 	public Characteristics get() {
-		final Options option = faker.options();
-		Number numberSupplier = faker.number();
-		Supplier<Integer> randomInitiative = () -> numberSupplier.numberBetween(1, 20);
-		Supplier<Integer> randomMaxLife = () -> numberSupplier.numberBetween(1, 20);
-		Supplier<Integer> randomStrength = () -> numberSupplier.numberBetween(1, 20);
-		final Integer maxLife = randomMaxLife.get();
+		final Integer maxLife = lifeSupplier.get();
 		return new Characteristics(
-				randomInitiative.get(),
+				initiativeSupplier.get(),
 				maxLife,
 				maxLife,
-				randomStrength.get(),
-				Set.of(option.option(Trait.class))
+				strengthSupplier.get(),
+				traitSupplier.get()
 		);
+	}
+
+	public CharacteristicsSupplier setInitiativeSupplier(Supplier<Integer> initiativeSupplier) {
+		this.initiativeSupplier = initiativeSupplier;
+		return this;
+	}
+
+	public CharacteristicsSupplier setLifeSupplier(Supplier<Integer> lifeSupplier) {
+		this.lifeSupplier = lifeSupplier;
+		return this;
+	}
+
+	public CharacteristicsSupplier setStrengthSupplier(Supplier<Integer> strengthSupplier) {
+		this.strengthSupplier = strengthSupplier;
+		return this;
+	}
+
+	public CharacteristicsSupplier setTraitSupplier(Supplier<Traits> traitSupplier) {
+		this.traitSupplier = traitSupplier;
+		return this;
 	}
 }

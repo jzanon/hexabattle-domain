@@ -5,7 +5,10 @@ import com.aedyl.domain.characteristics.Trait;
 import com.aedyl.domain.combat.AttackResolver;
 import com.aedyl.domain.combat.AttackResult;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Human {
@@ -45,7 +48,7 @@ public class Human {
 	public String toString() {
 		return "Human{" +
 				"name='" + name +
-				"', traits='" + characteristics.traits().stream().map(Trait::name).collect(Collectors.joining(",","","")) + "'}";
+				"', traits='" + characteristics.traits() + "'}";
 	}
 
 	public boolean isAlive() {

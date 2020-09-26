@@ -26,7 +26,6 @@ public class EnemyChooser {
 		} else {
 			enemies = everyBodyAliveExceptMe(me, fighters);
 		}
-
 		if (enemies.isEmpty()) {
 			return Optional.empty();
 		}

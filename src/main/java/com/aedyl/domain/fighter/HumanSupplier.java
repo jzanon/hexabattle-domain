@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public class HumanSupplier implements Supplier<Human> {
 
 	private final Faker faker = Faker.instance();
-	private final Supplier<Characteristics> characteristicsSupplier;
+	private Supplier<Characteristics> characteristicsSupplier;
 
 	public HumanSupplier(Supplier<Characteristics> charactSupplier) {
 		this.characteristicsSupplier = charactSupplier;
@@ -27,5 +27,9 @@ public class HumanSupplier implements Supplier<Human> {
 				new EnemyChooser(),
 				new AttackResolver()
 		);
+	}
+
+	public void setCharacteristicsSupplier(Supplier<Characteristics> characteristicsSupplier) {
+		this.characteristicsSupplier = characteristicsSupplier;
 	}
 }
