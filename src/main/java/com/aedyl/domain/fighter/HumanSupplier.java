@@ -29,7 +29,4 @@ public class HumanSupplier implements Supplier<Human> {
 		);
 	}
 
-	public void setCharacteristicsSupplier(Supplier<Characteristics> characteristicsSupplier) {
-		this.characteristicsSupplier = characteristicsSupplier;
-	}
 }

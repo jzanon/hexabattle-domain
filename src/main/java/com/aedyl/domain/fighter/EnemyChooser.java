@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import static java.util.function.Predicate.not;
 
 public class EnemyChooser {
+	public static final int LOW_LIFE = 3;
 	private final Random random;
 
 	public EnemyChooser() {
@@ -29,8 +30,12 @@ public class EnemyChooser {
 		if (enemies.isEmpty()) {
 			return Optional.empty();
 		}
-		Human enemy = enemies.get(random.nextInt(enemies.size()));
+		Human enemy = getRandom(enemies);
 		return Optional.of(enemy);
+	}
+
+	private Human getRandom(List<Human> enemies) {
+		return enemies.get(random.nextInt(enemies.size()));
 	}
 
 	private List<Human> cruelChoice(Human me, List<Human> fighters) {
@@ -46,7 +51,7 @@ public class EnemyChooser {
 	}
 
 	private Predicate<Human> isNearToDeath() {
-		return human -> human.getCharacteristics().life() < 3;
+		return human -> human.getCharacteristics().life() <= LOW_LIFE;
 	}
 
 	private List<Human> mercifulChoice(Human me, List<Human> fighters) {

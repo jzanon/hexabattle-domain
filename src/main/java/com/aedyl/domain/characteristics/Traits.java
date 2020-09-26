@@ -1,12 +1,13 @@
 package com.aedyl.domain.characteristics;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Traits {
 
-	private Set<Trait> traits = new HashSet<>();
+	private final Set<Trait> traits = new HashSet<>();
 
 	public static Traits of(Trait... traitList) {
 		Traits traits = new Traits();
@@ -19,6 +20,10 @@ public class Traits {
 	}
 
 	public Traits add(Trait trait) {
+		final Set<Trait> incompatibleTraits = trait.getIncompatibleTraits();
+		if (!Collections.disjoint(traits, incompatibleTraits)) {
+			throw new IllegalArgumentException(trait.name() + " is not compatible with current traits: " + this.toString());
+		}
 		traits.add(trait);
 		return this;
 	}

@@ -62,9 +62,9 @@ class EnemyChooserTest {
 	@Test
 	void cruel_human_targets_low_life_enemies_first() {
 		Human cruelHuman = createHuman(() -> Traits.of(Trait.CRUEL));
-		Human humanFullLife1 = new Human(UUID.randomUUID(), "HumanFullLife1", new Characteristics(5, 10, 10, 9, Traits.of(Trait.CRUEL)), new EnemyChooser(), new AttackResolver());
-		Human humanWithLowLife = new Human(UUID.randomUUID(), "HumanWithLowLife", new Characteristics(5, 50, 2, 9, Traits.of(Trait.MERCIFUL)), new EnemyChooser(), new AttackResolver());
-		Human humanFullLife2 = new Human(UUID.randomUUID(), "HumanFullLife2", new Characteristics(5, 5, 5, 9, Traits.of(Trait.CRUEL)), new EnemyChooser(), new AttackResolver());
+		Human humanFullLife1 =  createHuman(() -> 20);
+		Human humanWithLowLife =  createHuman(() -> 3);
+		Human humanFullLife2 =  createHuman(() -> 10);
 
 		Optional<Human> potentialEnemy = new EnemyChooser().pickEnemy(cruelHuman, List.of(cruelHuman, humanFullLife1, humanWithLowLife, humanFullLife2));
 
@@ -80,9 +80,9 @@ class EnemyChooserTest {
 	@Test
 	void merciful_human_do_not_targets_low_life_enemies() {
 		Human cruelHuman = createHuman(() -> Traits.of(Trait.MERCIFUL));
-		Human humanWithLowLife1 = new Human(UUID.randomUUID(), "HumanWithLowLife1", new Characteristics(5, 10, 1, 9, Traits.of(Trait.CRUEL)), new EnemyChooser(), new AttackResolver());
-		Human humanWithLowLife2 = new Human(UUID.randomUUID(), "HumanWithLowLife2", new Characteristics(5, 50, 2, 9, Traits.of(Trait.MERCIFUL)), new EnemyChooser(), new AttackResolver());
-		Human humanFullLife = new Human(UUID.randomUUID(), "HumanFullLife", new Characteristics(5, 40, 40, 9, Traits.of(Trait.CRUEL)), new EnemyChooser(), new AttackResolver());
+		Human humanWithLowLife1 = createHuman(() -> 1);
+		Human humanWithLowLife2 = createHuman(() -> 2);
+		Human humanFullLife = createHuman(() -> 50);
 
 		Optional<Human> potentialEnemy = new EnemyChooser().pickEnemy(cruelHuman, List.of(cruelHuman, humanWithLowLife1, humanFullLife, humanWithLowLife2));
 
@@ -94,18 +94,23 @@ class EnemyChooserTest {
 	@Test
 	void merciful_human_prefers_target_noOne_than_low_life_enemies() {
 		Human cruelHuman = createHuman(() -> Traits.of(Trait.MERCIFUL));
-		Human humanWithLowLife1 = new Human(UUID.randomUUID(), "HumanWithLowLife1", new Characteristics(5, 10, 1, 9, Traits.of(Trait.CRUEL)), new EnemyChooser(), new AttackResolver());
-		Human humanWithLowLife2 = new Human(UUID.randomUUID(), "HumanWithLowLife2", new Characteristics(5, 50, 2, 9, Traits.of(Trait.MERCIFUL)), new EnemyChooser(), new AttackResolver());
+		Human humanWithLowLife1 = createHuman(() -> 1);
+		Human humanWithLowLife2 = createHuman(() -> 2);
 
 		Optional<Human> potentialEnemy = new EnemyChooser().pickEnemy(cruelHuman, List.of(cruelHuman, humanWithLowLife1, humanWithLowLife2));
 		assertTrue(potentialEnemy.isEmpty());
 	}
 
-	private Human createHuman(Supplier<Traits> supplier) {
-		Supplier<Characteristics> cruelCaracSupplier = new CharacteristicsSupplier().setTraitSupplier(supplier);
-		final HumanSupplier cruelHumanSupplier = new HumanSupplier(cruelCaracSupplier);
-		return cruelHumanSupplier.get();
+
+	private Human createHuman(CharacteristicsSupplier.TraitsSupplier supplier) {
+		Supplier<Characteristics> caracSupplier = new CharacteristicsSupplier().setSupplier(supplier);
+		final HumanSupplier humanSupplier = new HumanSupplier(caracSupplier);
+		return humanSupplier.get();
 	}
 
-
+	private Human createHuman(CharacteristicsSupplier.LifeSupplier supplier) {
+		Supplier<Characteristics> caracSupplier = new CharacteristicsSupplier().setSupplier(supplier);
+		final HumanSupplier humanSupplier = new HumanSupplier(caracSupplier);
+		return humanSupplier.get();
+	}
 }

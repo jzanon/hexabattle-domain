@@ -18,7 +18,7 @@ public class Game {
 	private static final Logger logger = LoggerFactory.getLogger(Game.class);
 
 	public void launch() {
-		final int numberOfFighter = 100;
+		final int numberOfFighter = 1000;
 		final int numberMaxOfRound = 15;
 
 		Arena arena = setupArena(numberOfFighter);

@@ -7,10 +7,22 @@ import com.github.javafaker.Options;
 import java.util.function.Supplier;
 
 public class CharacteristicsSupplier implements Supplier<Characteristics> {
-	private Supplier<Traits> traitSupplier;
-	private Supplier<Integer> initiativeSupplier;
-	private Supplier<Integer> lifeSupplier;
-	private Supplier<Integer> strengthSupplier;
+	public interface LifeSupplier extends Supplier<Integer> {
+	}
+
+	public interface StrengthSupplier extends Supplier<Integer> {
+	}
+
+	public interface InitiativeSupplier extends Supplier<Integer> {
+	}
+
+	public interface TraitsSupplier extends Supplier<Traits> {
+	}
+
+	private TraitsSupplier traitSupplier;
+	private InitiativeSupplier initiativeSupplier;
+	private LifeSupplier lifeSupplier;
+	private StrengthSupplier strengthSupplier;
 
 	public CharacteristicsSupplier() {
 		Faker faker = Faker.instance();
@@ -34,22 +46,22 @@ public class CharacteristicsSupplier implements Supplier<Characteristics> {
 		);
 	}
 
-	public CharacteristicsSupplier setInitiativeSupplier(Supplier<Integer> initiativeSupplier) {
+	public CharacteristicsSupplier setSupplier(InitiativeSupplier initiativeSupplier) {
 		this.initiativeSupplier = initiativeSupplier;
 		return this;
 	}
 
-	public CharacteristicsSupplier setLifeSupplier(Supplier<Integer> lifeSupplier) {
+	public CharacteristicsSupplier setSupplier(LifeSupplier lifeSupplier) {
 		this.lifeSupplier = lifeSupplier;
 		return this;
 	}
 
-	public CharacteristicsSupplier setStrengthSupplier(Supplier<Integer> strengthSupplier) {
+	public CharacteristicsSupplier setSupplier(StrengthSupplier strengthSupplier) {
 		this.strengthSupplier = strengthSupplier;
 		return this;
 	}
 
-	public CharacteristicsSupplier setTraitSupplier(Supplier<Traits> traitSupplier) {
+	public CharacteristicsSupplier setSupplier(TraitsSupplier traitSupplier) {
 		this.traitSupplier = traitSupplier;
 		return this;
 	}
