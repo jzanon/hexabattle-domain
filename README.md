@@ -6,7 +6,11 @@ This project uses [Java Faker](http://dius.github.io/java-faker/) to creates its
 
 ## Java 15: Records
 
-[Java 15 Records](https://openjdk.java.net/jeps/359) tested 
+[Java 15 Records](https://openjdk.java.net/jeps/359): tested 
+
+## Java 14: Switch expression
+
+[Java 14: Switch Expressions](https://openjdk.java.net/jeps/361): tested 
 
 ## JMH & JDK 15
 
