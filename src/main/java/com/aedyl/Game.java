@@ -2,8 +2,6 @@ package com.aedyl;
 
 import com.aedyl.domain.Arena;
 import com.aedyl.domain.combat.Round;
-import com.aedyl.domain.characteristics.Characteristics;
-import com.aedyl.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.domain.fighter.Human;
 import com.aedyl.domain.fighter.HumanSupplier;
 import org.slf4j.Logger;
@@ -25,14 +23,12 @@ public class Game {
 
 		arena.getSurvivors().forEach(fighter -> logger.info("Fighter: {}", fighter));
 
-		arena.fight(numberMaxOfRound);
+		final List<Round> rounds = arena.fight(numberMaxOfRound);
 
-		logResults(arena);
+		logResults(arena, rounds);
 	}
 
-	private void logResults(Arena arena) {
-		final List<Round> rounds = arena.getRounds();
-
+	private void logResults(Arena arena, List<Round> rounds) {
 		rounds.stream()
 				.map(Round::buildSummary)
 				.forEach(logger::info);
@@ -49,8 +45,7 @@ public class Game {
 
 
 	private Arena setupArena(int numberOfFighter) {
-		Supplier<Characteristics> charactSupplier = new CharacteristicsSupplier();
-		Supplier<Human> humanSupplier = new HumanSupplier(charactSupplier);
+		Supplier<Human> humanSupplier = new HumanSupplier();
 
 		List<Human> fighters = IntStream.range(0, numberOfFighter)
 				.mapToObj(value -> humanSupplier.get())

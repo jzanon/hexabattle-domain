@@ -12,15 +12,14 @@ import java.util.stream.Collectors;
 public class Arena {
 
 	private List<Human> survivors;
-	private final List<Round> rounds = new ArrayList<>();
 	private int currentRoundIndex = 0;
 
 	public Arena(List<Human> fighters) {
 		this.survivors = new ArrayList<>(fighters);
 	}
 
-	public void fight(int numberOfRoundLimit) {
-
+	public List<Round> fight(int numberOfRoundLimit) {
+		List<Round> rounds = new ArrayList<>();
 		while (survivors.size() > 1 && currentRoundIndex <= numberOfRoundLimit) {
 			currentRoundIndex++;
 			final List<AttackResult> attackResults = survivors.stream()
@@ -34,10 +33,6 @@ public class Arena {
 
 			rounds.add(new Round(currentRoundIndex, attackResults));
 		}
-
-	}
-
-	public List<Round> getRounds() {
 		return rounds;
 	}
 

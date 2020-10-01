@@ -13,7 +13,7 @@ public class AttackResolver {
 
 	public AttackResult resolveAttack(Human attacker, Human defender) {
 		int hit = getAttackPower(attacker);
-		Human enemyAfterFight = defender.suffersStroke(hit);
+		Human enemyAfterFight = defender.suffersStroke(attacker, hit);
 		if (hit == 0) {
 			return AttackResult.missedAttack(attacker, enemyAfterFight);
 		}

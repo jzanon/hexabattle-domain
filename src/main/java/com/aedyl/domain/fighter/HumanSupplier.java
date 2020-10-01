@@ -1,6 +1,7 @@
 package com.aedyl.domain.fighter;
 
 import com.aedyl.domain.characteristics.Characteristics;
+import com.aedyl.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.domain.combat.AttackResolver;
 import com.github.javafaker.Ancient;
 import com.github.javafaker.Faker;
@@ -11,7 +12,11 @@ import java.util.function.Supplier;
 public class HumanSupplier implements Supplier<Human> {
 
 	private final Faker faker = Faker.instance();
-	private Supplier<Characteristics> characteristicsSupplier;
+	private final Supplier<Characteristics> characteristicsSupplier;
+
+	public HumanSupplier() {
+		this.characteristicsSupplier = new CharacteristicsSupplier();
+	}
 
 	public HumanSupplier(Supplier<Characteristics> charactSupplier) {
 		this.characteristicsSupplier = charactSupplier;

@@ -1,15 +1,15 @@
 package com.aedyl.domain.fighter;
 
 import com.aedyl.domain.characteristics.Characteristics;
-import com.aedyl.domain.characteristics.Trait;
+import com.aedyl.domain.characteristics.HumanMemory;
 import com.aedyl.domain.combat.AttackResolver;
 import com.aedyl.domain.combat.AttackResult;
+import com.aedyl.domain.combat.AttackStatus;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Human {
 
@@ -18,6 +18,7 @@ public class Human {
 	private Characteristics characteristics;
 	private final EnemyChooser enemyChooser;
 	private final AttackResolver attackResolver;
+	private final HumanMemory memory = new HumanMemory();
 
 	public Human(UUID uniqueId,
 	             String name,
@@ -48,7 +49,9 @@ public class Human {
 	public String toString() {
 		return "Human{" +
 				"name='" + name +
-				"', traits='" + characteristics.traits() + "'}";
+				"', traits='" + characteristics.primary() + "','" + characteristics.secondary() + "'" +
+				", life="+characteristics.life()+"/"+characteristics.maxLife()+
+				"}";
 	}
 
 	public boolean isAlive() {
@@ -64,10 +67,15 @@ public class Human {
 
 
 	public AttackResult fight(Human enemy) {
-		return attackResolver.resolveAttack(this, enemy);
+		final AttackResult attackResult = attackResolver.resolveAttack(this, enemy);
+		if (!attackResult.status().equals(AttackStatus.NO_ENEMY_FOUND)) {
+			memory.setLastHumanIAttacked(enemy);
+		}
+		return attackResult;
 	}
 
-	public Human suffersStroke(int hit) {
+	public Human suffersStroke(Human attacker, int hit) {
+		memory.setLastHumanWhoAttackedMe(attacker);
 		final Characteristics newCharac = characteristics.decreaseLife(hit);
 		return setCharacteristics(newCharac);
 	}
@@ -81,8 +89,12 @@ public class Human {
 		return characteristics;
 	}
 
-	public boolean is(Trait trait) {
-		return characteristics.traits().contains(trait);
+	public Optional<Human> getLastHumanWhoAttackedMe() {
+		return memory.getLastHumanWhoAttackedMe();
+	}
+
+	public Optional<Human> getLastHumanIAttacked() {
+		return memory.getLastHumanIAttacked();
 	}
 }
 

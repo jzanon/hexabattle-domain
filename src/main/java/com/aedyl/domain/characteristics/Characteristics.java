@@ -4,9 +4,10 @@ public record Characteristics(int initiative,
                               int maxLife,
                               int life,
                               int strength,
-                              Traits traits) {
+                              Trait primary,
+                              Trait secondary) {
 
 	public Characteristics decreaseLife(int lifeToRemove) {
-		return new Characteristics(initiative, maxLife, life - lifeToRemove, strength, traits);
+		return new Characteristics(initiative, maxLife, life - lifeToRemove, strength, primary, secondary);
 	}
 }

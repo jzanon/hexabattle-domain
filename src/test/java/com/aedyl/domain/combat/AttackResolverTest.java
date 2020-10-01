@@ -1,9 +1,7 @@
 package com.aedyl.domain.combat;
 
 import com.aedyl.domain.characteristics.Characteristics;
-import com.aedyl.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.domain.characteristics.Trait;
-import com.aedyl.domain.characteristics.Traits;
 import com.aedyl.domain.fighter.EnemyChooser;
 import com.aedyl.domain.fighter.Human;
 import com.aedyl.domain.fighter.HumanSupplier;
@@ -21,8 +19,7 @@ class AttackResolverTest {
 
 	@BeforeAll
 	static void initSuppliers() {
-		CharacteristicsSupplier randomCharacteristicsSupplier = new CharacteristicsSupplier();
-		randomHumanSupplier = new HumanSupplier(randomCharacteristicsSupplier);
+		randomHumanSupplier = new HumanSupplier();
 	}
 
 	/**
@@ -34,17 +31,17 @@ class AttackResolverTest {
 		final AttackResolverWithoutRandom attackResolver = new AttackResolverWithoutRandom();
 		attackResolver.setAttackPower(attackValue);
 
-		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Traits.of(Trait.MERCIFUL)), new EnemyChooser(), attackResolver);
+		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), new EnemyChooser(i -> 0), attackResolver);
 		Human enemy = randomHumanSupplier.get();
 		final int initialLifeOfEnemy = enemy.getCharacteristics().life();
 
 		final AttackResult statistics = me.fight(enemy);
 
-		assertEquals(me, statistics.assailant());
+		assertEquals(Attacker.fromHuman(me), statistics.assailant());
 		assertEquals(AttackStatus.SUCCESS, statistics.status());
 		assertEquals(attackValue, statistics.hit());
-		assertEquals(enemy.uniqueId, statistics.defender().uniqueId);
-		assertEquals(initialLifeOfEnemy - attackValue, statistics.defender().getCharacteristics().life());
+		assertEquals(enemy.uniqueId, statistics.defender().id());
+		assertEquals(initialLifeOfEnemy - attackValue, statistics.defender().characteristics().life());
 	}
 
 	/**
@@ -55,16 +52,16 @@ class AttackResolverTest {
 		final AttackResolverWithoutRandom attackResolver = new AttackResolverWithoutRandom();
 		attackResolver.setAttackPower(0);
 
-		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Traits.of(Trait.MERCIFUL)), new EnemyChooser(), attackResolver);
+		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), new EnemyChooser(i -> 0), attackResolver);
 		Human enemy = randomHumanSupplier.get();
 		final AttackResult statistics = me.fight(enemy);
 
-		assertEquals(me, statistics.assailant());
+		assertEquals(Attacker.fromHuman(me), statistics.assailant());
 		assertEquals(AttackStatus.MISSED, statistics.status());
 		assertEquals(0, statistics.hit());
-		assertEquals(enemy, statistics.defender());
-		assertEquals(enemy.uniqueId, statistics.defender().uniqueId);
-		assertEquals(enemy.getCharacteristics().life(), statistics.defender().getCharacteristics().life());
+		assertEquals(Defender.fromHuman(enemy), statistics.defender());
+		assertEquals(enemy.uniqueId, statistics.defender().id());
+		assertEquals(enemy.getCharacteristics().life(), statistics.defender().characteristics().life());
 	}
 
 

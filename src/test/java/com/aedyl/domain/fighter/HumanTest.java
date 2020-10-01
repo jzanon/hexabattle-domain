@@ -3,7 +3,6 @@ package com.aedyl.domain.fighter;
 import com.aedyl.domain.characteristics.Characteristics;
 import com.aedyl.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.domain.characteristics.Trait;
-import com.aedyl.domain.characteristics.Traits;
 import com.aedyl.domain.combat.AttackResolver;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -42,10 +41,10 @@ class HumanTest {
 	@Test
 	void isAlive() {
 		final EnemyChooser enemyChooser = new EnemyChooser();
-		Human human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 7, 9, Traits.of(Trait.MERCIFUL)), enemyChooser, new AttackResolver());
+		Human human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 7, 9, Trait.MERCIFUL, Trait.APATHETIC), enemyChooser, new AttackResolver());
 		assertTrue(human.isAlive());
 
-		human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Traits.of(Trait.MERCIFUL)), enemyChooser, new AttackResolver());
+		human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), enemyChooser, new AttackResolver());
 		assertFalse(human.isAlive());
 	}
 
