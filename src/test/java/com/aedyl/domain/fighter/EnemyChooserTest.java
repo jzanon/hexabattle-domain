@@ -112,7 +112,7 @@ class EnemyChooserTest {
 		// Primary trait is MERCIFUL --> I attacked last an enemy who is low life now so I do not pick him,
 		// even if my Secondary trait is PASSIONATE:
 		Human me = createHuman(() -> Trait.MERCIFUL, (Trait trait) -> Trait.PASSIONATE);
-		Human humanIAttackFirst = createHuman(() -> 20);
+		Human humanIAttackFirst =  createHuman(() -> 1000); // ensure he will not die at first fight
 		Human lastHumanIAttackedButWithLowLife = createHuman(() -> 1);
 
 		me.fight(humanIAttackFirst);
@@ -142,8 +142,8 @@ class EnemyChooserTest {
 	@Test
 	void passionate_human_continue_to_target_same_enemy() {
 		Human me = createHuman(() -> Trait.PASSIONATE);
-		Human humanIAttack1 = randomHumanSupplier.get();
-		Human humanIAttack2 = randomHumanSupplier.get();
+		Human humanIAttack1 =  createHuman(() -> 1000); // ensure he will not die at first fight
+		Human humanIAttack2 =  createHuman(() -> 1000); // ensure he will not die at first fight
 
 		me.fight(humanIAttack1);
 		me.fight(humanIAttack2);
