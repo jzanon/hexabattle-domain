@@ -1,4 +1,4 @@
-package com.aedyl.domain.fighter;
+package com.aedyl.domain.characteristics;
 
 import com.aedyl.domain.characteristics.Characteristics;
 import com.aedyl.domain.characteristics.Trait;

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class Arena {
 
 	private List<Human> survivors;
-	private int currentRoundIndex = 0;
+	private int nbOfRoundExecuted = 0;
 
 	public Arena(List<Human> fighters) {
 		this.survivors = new ArrayList<>(fighters);
@@ -20,8 +20,7 @@ public class Arena {
 
 	public List<Round> fight(int numberOfRoundLimit) {
 		List<Round> rounds = new ArrayList<>();
-		while (survivors.size() > 1 && currentRoundIndex <= numberOfRoundLimit) {
-			currentRoundIndex++;
+		while (survivors.size() > 1 && nbOfRoundExecuted < numberOfRoundLimit) {
 			final List<AttackResult> attackResults = survivors.stream()
 					.filter(Human::isAlive)
 					.sorted(HumanComparator::compareByInitiative)
@@ -31,12 +30,21 @@ public class Arena {
 			// reduce size of survivor list to avoid useless iteration
 			survivors = survivors.stream().filter(Human::isAlive).collect(Collectors.toList());
 
-			rounds.add(new Round(currentRoundIndex, attackResults));
+			nbOfRoundExecuted++;
+			rounds.add(new Round(nbOfRoundExecuted, attackResults));
 		}
 		return rounds;
 	}
 
 	public List<Human> getSurvivors() {
 		return survivors;
+	}
+
+	public int getNbOfRoundExecuted() {
+		return nbOfRoundExecuted;
+	}
+
+	public boolean hasEnoughFighters() {
+		return survivors.size() > 1;
 	}
 }
