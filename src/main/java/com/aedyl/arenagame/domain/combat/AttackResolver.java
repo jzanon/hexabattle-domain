@@ -21,6 +21,10 @@ public class AttackResolver {
 	}
 
 	public int getAttackPower(Human attacker) {
-		return random.nextInt(attacker.getCharacteristics().strength());
+		final int strength = attacker.getCharacteristics().strength();
+		if (strength <= 0){
+			return 0;
+		}
+		return random.nextInt(strength);
 	}
 }

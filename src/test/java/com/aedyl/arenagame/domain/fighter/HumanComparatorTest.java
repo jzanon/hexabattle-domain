@@ -1,5 +1,6 @@
 package com.aedyl.arenagame.domain.fighter;
 
+import com.aedyl.arenagame.domain.HumanFactoryForTests;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.fighter.Human;
 import com.aedyl.arenagame.domain.fighter.HumanComparator;
@@ -16,14 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class HumanComparatorTest {
 
 
-	CharacteristicsSupplier characteristicSupplier;
-	HumanSupplier humanSupplier;
+	private final HumanFactoryForTests factory = new HumanFactoryForTests();
 
-	@BeforeEach
-	public void init() {
-		characteristicSupplier = new CharacteristicsSupplier();
-		humanSupplier = new HumanSupplier(characteristicSupplier);
-	}
 
 	private static Stream<Arguments> provideInitiativesForComparison() {
 		return Stream.of(
@@ -39,16 +34,12 @@ class HumanComparatorTest {
 	@ParameterizedTest(name="#{index} - Test initiative comparison with Argument={0},{1}")
 	@MethodSource("provideInitiativesForComparison")
 	void compareByInitiative(int firstInit, int secondInit) {
-		final Human human1 = getHuman(firstInit);
-		final Human human2 = getHuman(secondInit);
+		final Human human1 = factory.createHuman((CharacteristicsSupplier.InitiativeSupplier) () -> firstInit);
+		final Human human2 = factory.createHuman((CharacteristicsSupplier.InitiativeSupplier) () -> secondInit);
 
 		final int comparisonResult = HumanComparator.compareByInitiative(human1, human2);
 
 		assertEquals(Integer.compare(secondInit, firstInit), comparisonResult);
 	}
 
-	private Human getHuman(final int init) {
-		characteristicSupplier.setSupplier((CharacteristicsSupplier.InitiativeSupplier) () -> init);
-		return humanSupplier.get();
-	}
 }

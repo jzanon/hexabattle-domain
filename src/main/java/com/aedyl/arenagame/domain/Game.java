@@ -1,47 +1,38 @@
 package com.aedyl.arenagame.domain;
 
-import com.aedyl.arenagame.console.ConsoleAdapter;
-import com.aedyl.arenagame.domain.combat.Round;
+import com.aedyl.arenagame.domain.arena.Arena;
+import com.aedyl.arenagame.domain.arena.ArenaEventPublisher;
 import com.aedyl.arenagame.domain.fighter.Human;
-import com.aedyl.arenagame.domain.fighter.HumanSupplier;
 
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static com.aedyl.arenagame.domain.arena.ArenaEvent.*;
 
 public class Game {
 
-	private final ConsoleAdapter adapter;
+	private final ArenaEventPublisher arenaEventPublisher;
+	private final Supplier<Human> humanSupplier;
 
-	public Game() {
-		adapter = new ConsoleAdapter();
+	public Game(ArenaEventPublisher arenaEventPublisher, Supplier<Human> fighterSupplier) {
+		this.arenaEventPublisher = arenaEventPublisher;
+		humanSupplier = fighterSupplier;
 	}
 
-	public void launch(int numberOfFighter, int nbRoundByStep, int numberStep) {
+	public void launch(int arenaSize, int nbRoundMax) {
+		Arena arena = new Arena(arenaEventPublisher);
 
-		Arena arena = setupArena(numberOfFighter);
+		IntStream.range(0, arenaSize)
+				.mapToObj(value -> humanSupplier.get())
+				.forEach(arena::addFighter);
 
-		adapter.arenaInitialized(arena);
+		arenaEventPublisher.publish(ArenaInitializedEvent.from(arena));
 
-		int currentStep = 1;
-		while (arena.hasEnoughFighters() && numberStep >= currentStep) {
-			final List<Round> rounds = arena.fight(nbRoundByStep * currentStep);
-			adapter.roundsCompleted(rounds);
-			currentStep++;
+		while (arena.hasEnoughFighters() && arena.getNbOfRoundExecuted() <= nbRoundMax) {
+			arena.fight();
 		}
 
-		adapter.arenaCompleted(arena);
+		arenaEventPublisher.publish(ArenaCompletedEvent.from(arena));
 	}
 
-
-	private Arena setupArena(int numberOfFighter) {
-		Supplier<Human> humanSupplier = new HumanSupplier();
-
-		List<Human> fighters = IntStream.range(0, numberOfFighter)
-				.mapToObj(value -> humanSupplier.get())
-				.collect(Collectors.toUnmodifiableList());
-
-		return new Arena(fighters);
-	}
 }

@@ -44,9 +44,6 @@ class AttackResolverTest {
 		assertEquals(initialLifeOfEnemy - attackValue, statistics.defender().characteristics().life());
 	}
 
-	/**
-	 * FLAKY due to Random
-	 */
 	@Test
 	void fightMissed() {
 		final AttackResolverWithoutRandom attackResolver = new AttackResolverWithoutRandom();

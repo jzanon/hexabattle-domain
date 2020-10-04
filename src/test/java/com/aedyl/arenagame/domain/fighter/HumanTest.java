@@ -4,9 +4,6 @@ import com.aedyl.arenagame.domain.characteristics.Characteristics;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.characteristics.Trait;
 import com.aedyl.arenagame.domain.combat.AttackResolver;
-import com.aedyl.arenagame.domain.fighter.EnemyChooser;
-import com.aedyl.arenagame.domain.fighter.Human;
-import com.aedyl.arenagame.domain.fighter.HumanSupplier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
