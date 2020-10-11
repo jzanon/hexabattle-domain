@@ -20,7 +20,7 @@ class HumanTest {
 	@BeforeAll
 	static void initSuppliers() {
 		randomCharacteristicsSupplier = new CharacteristicsSupplier();
-		randomHumanSupplier = new HumanSupplier(randomCharacteristicsSupplier);
+		randomHumanSupplier = new HumanSupplier().setCharacteristicsSupplier(randomCharacteristicsSupplier);
 	}
 
 	@Test

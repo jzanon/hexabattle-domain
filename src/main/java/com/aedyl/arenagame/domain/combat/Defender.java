@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record Defender(UUID id,
                        String name,
-                       Characteristics characteristics) {
+                       Characteristics characteristics) implements Fighter {
 
 	public static Defender fromHuman(Human attacker) {
 		return new Defender(attacker.uniqueId, attacker.name, attacker.getCharacteristics());

@@ -26,8 +26,8 @@ public class Arena {
 			return;
 		}
 		final List<AttackResult> attackResults = survivors.stream()
-				.filter(Human::isAlive)
 				.sorted(HumanComparator::compareByInitiative)
+				.filter(Human::isAlive)
 				.map(human -> human.fight(survivors))
 				.collect(Collectors.toList());
 
