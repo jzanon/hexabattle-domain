@@ -6,24 +6,38 @@ import com.aedyl.arenagame.domain.fighter.Human;
 import com.aedyl.arenagame.domain.fighter.HumanComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static com.aedyl.arenagame.domain.arena.ArenaEvent.HumanJoinedArenaEvent;
 
 public class Arena {
 
-	private final ArenaEventPublisher eventPublisher;
+	private static final int DEFAULT_MAX_SIZE = 100;
+	private static final int DEFAULT_NB_ROUND_MAX = 20;
+	private final UUID id;
 	private List<Human> survivors = new ArrayList<>();
 	private int nbOfRoundExecuted = 0;
+	private final int maxSize;
+	private final int nbRoundMax;
+	private boolean finished;
 
-	public Arena(ArenaEventPublisher eventPublisher) {
-		this.eventPublisher = eventPublisher;
+	public Arena() {
+		this.id = UUID.randomUUID();
+		this.maxSize = DEFAULT_MAX_SIZE;
+		this.nbRoundMax = DEFAULT_NB_ROUND_MAX;
 	}
 
-	public void fight() {
-		if (!hasEnoughFighters()) {
-			return;
+	public Arena(int maxSize, int nbRoundMax) {
+		this.id = UUID.randomUUID();
+		this.maxSize = maxSize;
+		this.nbRoundMax = nbRoundMax;
+	}
+
+	public Round roundTick() {
+		nbOfRoundExecuted++;
+		if (notEnoughFighters()) {
+			return new Round(nbOfRoundExecuted, Collections.emptyList());
 		}
 		final List<AttackResult> attackResults = survivors.stream()
 				.sorted(HumanComparator::compareByInitiative)
@@ -33,8 +47,7 @@ public class Arena {
 
 		survivors = survivors.stream().filter(Human::isAlive).collect(Collectors.toList());
 
-		final Round round = new Round(++nbOfRoundExecuted, attackResults);
-		eventPublisher.publish(ArenaEvent.RoundCompletedEvent.from(round));
+		return new Round(nbOfRoundExecuted, attackResults);
 	}
 
 	public List<Human> getSurvivors() {
@@ -45,13 +58,31 @@ public class Arena {
 		return nbOfRoundExecuted;
 	}
 
-	public boolean hasEnoughFighters() {
-		return survivors.size() > 1;
+	public boolean notEnoughFighters() {
+		return survivors.size() <= 1;
 	}
 
 	public void addFighter(Human fighter) {
 		survivors.add(fighter);
-		eventPublisher.publish(HumanJoinedArenaEvent.from(fighter));
 	}
 
+	public int maxSize() {
+		return maxSize;
+	}
+
+	public UUID id() {
+		return id;
+	}
+
+	public int nbRoundMax() {
+		return nbRoundMax;
+	}
+
+	public void markFinished() {
+		this.finished = true;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
 }

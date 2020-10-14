@@ -4,12 +4,13 @@ import com.aedyl.arenagame.domain.combat.Round;
 import com.aedyl.arenagame.domain.fighter.Human;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public sealed interface ArenaEvent {
 
-	record ArenaInitializedEvent(Instant createdAt, Arena arena) implements ArenaEvent {
-		public static ArenaInitializedEvent from(Arena arena) {
-			return new ArenaInitializedEvent(Instant.now(), arena);
+	record ArenaCreatedEvent(Instant createdAt, Arena arena) implements ArenaEvent {
+		public static ArenaCreatedEvent from(Arena arena) {
+			return new ArenaCreatedEvent(Instant.now(), arena);
 		}
 
 	}
@@ -20,9 +21,9 @@ public sealed interface ArenaEvent {
 		}
 	}
 
-	record HumanJoinedArenaEvent(Instant createdAt, Human fighter) implements ArenaEvent {
-		public static HumanJoinedArenaEvent from(Human fighter) {
-			return new HumanJoinedArenaEvent(Instant.now(), fighter);
+	record HumanJoinedArenaEvent(Instant createdAt, UUID arenaId, Human fighter) implements ArenaEvent {
+		public static HumanJoinedArenaEvent from(UUID arenaId, Human fighter) {
+			return new HumanJoinedArenaEvent(Instant.now(), arenaId, fighter);
 		}
 	}
 

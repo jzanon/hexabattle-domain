@@ -28,19 +28,19 @@ public class ConsoleAdapter implements ArenaEventPublisher, StatisticsPublisher 
 		// still waiting for Pattern matching on sealed interface !
 		if (arenaEvent instanceof ArenaEvent.ArenaCompletedEvent arenaCompleted) {
 			arenaCompleted(arenaCompleted.arena());
-		} else if (arenaEvent instanceof ArenaEvent.ArenaInitializedEvent arenaInitialized) {
+		} else if (arenaEvent instanceof ArenaEvent.ArenaCreatedEvent arenaInitialized) {
 			arenaInitialized(arenaInitialized.arena());
 		} else if (arenaEvent instanceof ArenaEvent.RoundCompletedEvent roundCompleted) {
 			roundCompleted(roundCompleted.round());
 		} else if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent humanJoinedArenaEvent) {
-			humanJoinedArena(humanJoinedArenaEvent.fighter());
+			humanJoinedArena(humanJoinedArenaEvent.arenaId(), humanJoinedArenaEvent.fighter());
 		} else {
 			throw new IllegalStateException("Unexpected event type: " + arenaEvent);
 		}
 	}
 
 	public void arenaInitialized(Arena arena) {
-		arena.getSurvivors().forEach(fighter -> logger.info("Fighter: {}", fighter));
+		logger.info("A new Arena has been created: id='{}', maxSize={}", arena.id(), arena.maxSize());
 	}
 
 	public void arenaCompleted(Arena arena) {
@@ -94,8 +94,8 @@ public class ConsoleAdapter implements ArenaEventPublisher, StatisticsPublisher 
 				defender.isAlive() ? "" : " (dead)");
 	}
 
-	public void humanJoinedArena(Human fighter) {
-		logger.info("New fighter joined Arena: {}", fighter);
+	public void humanJoinedArena(UUID arenaId, Human fighter) {
+		logger.info("[Arena:'{}'] New fighter joined Arena: {}", arenaId, fighter);
 	}
 
 

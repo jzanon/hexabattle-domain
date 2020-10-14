@@ -1,18 +1,17 @@
 package com.aedyl.arenagame.domain.arena;
 
+import com.aedyl.arenagame.domain.HumanBuilder;
 import com.aedyl.arenagame.domain.HumanFactoryForTests;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
-import com.aedyl.arenagame.domain.characteristics.Trait;
 import com.aedyl.arenagame.domain.combat.AttackResolver;
 import com.aedyl.arenagame.domain.combat.AttackResult;
+import com.aedyl.arenagame.domain.combat.Round;
 import com.aedyl.arenagame.domain.fighter.EnemyChooser;
 import com.aedyl.arenagame.domain.fighter.Human;
-import com.aedyl.arenagame.domain.HumanBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,32 +21,32 @@ class ArenaTest {
 
 
 	@Test
+	void markAsFinished() {
+		Arena arena = new Arena(2, 6);
+		assertFalse(arena.isFinished());
+
+		arena.markFinished();
+		assertTrue(arena.isFinished());
+	}
+
+
+	@Test
 	void fightStopWhenRoundLimitReached() {
-		// Use APATHETIC humans to ensure no damage will occurs
-		final Human apatheticFighter1 = factory.createHuman((CharacteristicsSupplier.StrengthSupplier) () -> 0);
-		final Human apatheticFighter2 = factory.createHuman(() -> Trait.APATHETIC, (Trait t) -> Trait.APATHETIC);
+		// Use humans without strength  to ensure no damage will occurs
+		final Human nullStrengthFighter1 = factory.createHuman((CharacteristicsSupplier.StrengthSupplier) () -> 0);
+		final Human nullStrengthFighter2 = factory.createHuman((CharacteristicsSupplier.StrengthSupplier) () -> 0);
 
-		final AtomicInteger roundCounter = new AtomicInteger(0);
-		ArenaEventPublisher eventPublisher = arenaEvent -> {
-			if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent event) {
-				assertNotNull(event.fighter());
-			} else if (arenaEvent instanceof ArenaEvent.RoundCompletedEvent event) {
-				assertEquals(roundCounter.incrementAndGet(), event.round().number());
-			} else {
-				fail("Unexpected event received: " + arenaEvent);
-			}
-		};
+		Arena arena = new Arena(2, 6);
+		arena.addFighter(nullStrengthFighter1);
+		arena.addFighter(nullStrengthFighter2);
 
-		Arena arena = new Arena(eventPublisher);
-		arena.addFighter(apatheticFighter1);
-		arena.addFighter(apatheticFighter2);
+		IntStream.range(0, 6).forEach(value -> {
+			final Round round = arena.roundTick();
+			assertEquals(value + 1, round.number());
+		});
 
-		roundCounter.set(0); // reset counter
-		IntStream.range(0, 6).forEach(value -> arena.fight());
-
-
-		assertEquals(6, roundCounter.get());
 		assertEquals(6, arena.getNbOfRoundExecuted());
+		assertFalse(arena.isFinished());
 		assertEquals(2, arena.getSurvivors().size());
 	}
 
@@ -79,18 +78,13 @@ class ArenaTest {
 				.set((CharacteristicsSupplier.InitiativeSupplier) () -> 2)
 				.build();
 
-		ArenaEventPublisher eventPublisher = arenaEvent -> {
-			if (arenaEvent instanceof ArenaEvent.RoundCompletedEvent event) {
-				assertEquals(1, event.round().number());
-			}
-		};
-
-		Arena arena = new Arena(eventPublisher);
+		Arena arena = new Arena();
 		arena.addFighter(fighterWithLowInit);
 		arena.addFighter(fighterWithHighInit);
-		arena.fight();
+		arena.roundTick();
 
 		assertEquals(1, arena.getNbOfRoundExecuted());
+		assertFalse(arena.isFinished());
 		assertEquals(1, arena.getSurvivors().size());
 		assertSame(fighterWithHighInit, arena.getSurvivors().get(0));
 	}
@@ -100,48 +94,15 @@ class ArenaTest {
 	void noFightWhenOnlyOneSurvivor() {
 		final Human fighter = factory.createRandomHuman();
 
-		final AtomicInteger eventCounter = new AtomicInteger(0);
-		ArenaEventPublisher eventPublisher = arenaEvent -> {
-			eventCounter.incrementAndGet();
-			if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent event) {
-				assertSame(fighter, event.fighter());
-			} else if (arenaEvent instanceof ArenaEvent.RoundCompletedEvent event) {
-				fail("No fight should occurs but a round event has been received: " + event);
-			} else {
-				fail("Unexpected event received: " + arenaEvent);
-			}
-		};
-
-		Arena arena = new Arena(eventPublisher);
+		Arena arena = new Arena();
 		arena.addFighter(fighter);
-		arena.fight();
+		final Round round = arena.roundTick();
 
-		assertEquals(1, eventCounter.get());
-		assertEquals(0, arena.getNbOfRoundExecuted());
+		assertFalse(arena.isFinished());
 		assertEquals(1, arena.getSurvivors().size());
 		assertSame(fighter, arena.getSurvivors().get(0));
+		assertEquals(1, round.number());
+		assertEquals(0, round.stats().size());
 	}
 
-	@Test
-	void addFighterRaiseEvent() {
-		final Human fighter = factory.createRandomHuman();
-		final AtomicInteger eventCounter = new AtomicInteger(0);
-		ArenaEventPublisher eventPublisher = arenaEvent -> {
-			eventCounter.incrementAndGet();
-			if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent event) {
-				assertSame(fighter, event.fighter());
-
-			} else {
-				fail("Unexpected event received: " + arenaEvent);
-			}
-		};
-
-		Arena arena = new Arena(eventPublisher);
-		arena.addFighter(fighter);
-
-		assertEquals(1, eventCounter.get());
-		assertEquals(0, arena.getNbOfRoundExecuted());
-		assertEquals(1, arena.getSurvivors().size());
-		assertSame(fighter, arena.getSurvivors().get(0));
-	}
 }
