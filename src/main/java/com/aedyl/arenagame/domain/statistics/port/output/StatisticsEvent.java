@@ -2,7 +2,7 @@ package com.aedyl.arenagame.domain.statistics.port.output;
 
 import com.aedyl.arenagame.domain.arena.model.ArenaId;
 import com.aedyl.arenagame.domain.fighter.HumanId;
-import com.aedyl.arenagame.domain.statistics.FighterStatistics;
+import com.aedyl.arenagame.domain.statistics.model.FighterStatistics;
 
 import java.time.Instant;
 import java.util.Map;

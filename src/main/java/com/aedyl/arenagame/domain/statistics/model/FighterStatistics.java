@@ -1,4 +1,4 @@
-package com.aedyl.arenagame.domain.statistics;
+package com.aedyl.arenagame.domain.statistics.model;
 
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.fighter.HumanId;

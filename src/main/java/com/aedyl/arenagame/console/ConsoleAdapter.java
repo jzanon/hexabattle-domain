@@ -7,7 +7,7 @@ import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.combat.Defender;
 import com.aedyl.arenagame.domain.combat.Round;
 import com.aedyl.arenagame.domain.fighter.HumanId;
-import com.aedyl.arenagame.domain.statistics.FighterStatistics;
+import com.aedyl.arenagame.domain.statistics.model.FighterStatistics;
 import com.aedyl.arenagame.domain.statistics.port.output.StatisticsEvent;
 import com.aedyl.arenagame.domain.statistics.port.output.StatisticsPublisher;
 import org.slf4j.Logger;

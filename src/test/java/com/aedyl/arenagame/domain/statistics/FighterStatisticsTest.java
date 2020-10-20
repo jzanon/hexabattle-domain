@@ -5,6 +5,8 @@ import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.fighter.Human;
 import com.aedyl.arenagame.domain.fighter.HumanId;
+import com.aedyl.arenagame.domain.statistics.model.FighterStatistic;
+import com.aedyl.arenagame.domain.statistics.model.FighterStatistics;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
