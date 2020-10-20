@@ -4,13 +4,12 @@ import com.aedyl.arenagame.domain.characteristics.Characteristics;
 import com.aedyl.arenagame.domain.characteristics.Trait;
 import com.aedyl.arenagame.domain.fighter.EnemyChooser;
 import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.HumanId;
 import com.aedyl.arenagame.domain.fighter.HumanSupplier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,7 +30,7 @@ class AttackResolverTest {
 		final AttackResolverWithoutRandom attackResolver = new AttackResolverWithoutRandom();
 		attackResolver.setAttackPower(attackValue);
 
-		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), new EnemyChooser(i -> 0), attackResolver);
+		final Human me = new Human(HumanId.randomId(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), new EnemyChooser(i -> 0), attackResolver);
 		Human enemy = randomHumanSupplier.get();
 		final int initialLifeOfEnemy = enemy.getCharacteristics().life();
 
@@ -49,7 +48,7 @@ class AttackResolverTest {
 		final AttackResolverWithoutRandom attackResolver = new AttackResolverWithoutRandom();
 		attackResolver.setAttackPower(0);
 
-		final Human me = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), new EnemyChooser(i -> 0), attackResolver);
+		final Human me = new Human(HumanId.randomId(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), new EnemyChooser(i -> 0), attackResolver);
 		Human enemy = randomHumanSupplier.get();
 		final AttackResult statistics = me.fight(enemy);
 

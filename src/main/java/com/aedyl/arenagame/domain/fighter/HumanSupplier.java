@@ -6,7 +6,6 @@ import com.aedyl.arenagame.domain.combat.AttackResolver;
 import com.github.javafaker.Ancient;
 import com.github.javafaker.Faker;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class HumanSupplier implements Supplier<Human> {
@@ -42,7 +41,7 @@ public class HumanSupplier implements Supplier<Human> {
 		Ancient nameSupplier = faker.ancient();
 
 		return new Human(
-				UUID.randomUUID(),
+				HumanId.randomId(),
 				nameSupplier.hero(),
 				characteristicsSupplier.get(),
 				enemyChooser,

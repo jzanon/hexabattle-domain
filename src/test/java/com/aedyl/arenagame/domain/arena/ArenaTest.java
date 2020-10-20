@@ -2,6 +2,7 @@ package com.aedyl.arenagame.domain.arena;
 
 import com.aedyl.arenagame.domain.HumanBuilder;
 import com.aedyl.arenagame.domain.HumanFactoryForTests;
+import com.aedyl.arenagame.domain.arena.model.Arena;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.combat.AttackResolver;
 import com.aedyl.arenagame.domain.combat.AttackResult;

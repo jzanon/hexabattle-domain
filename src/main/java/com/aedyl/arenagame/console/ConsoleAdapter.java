@@ -1,22 +1,21 @@
 package com.aedyl.arenagame.console;
 
-import com.aedyl.arenagame.domain.arena.Arena;
-import com.aedyl.arenagame.domain.arena.ArenaEvent;
-import com.aedyl.arenagame.domain.arena.ArenaEventPublisher;
+import com.aedyl.arenagame.domain.arena.model.ArenaId;
+import com.aedyl.arenagame.domain.arena.port.output.ArenaEvent;
+import com.aedyl.arenagame.domain.arena.port.output.ArenaEventPublisher;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.combat.Defender;
 import com.aedyl.arenagame.domain.combat.Round;
-import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.HumanId;
 import com.aedyl.arenagame.domain.statistics.FighterStatistics;
-import com.aedyl.arenagame.statistics.StatisticsEvent;
-import com.aedyl.arenagame.statistics.StatisticsPublisher;
+import com.aedyl.arenagame.domain.statistics.port.output.StatisticsEvent;
+import com.aedyl.arenagame.domain.statistics.port.output.StatisticsPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ConsoleAdapter implements ArenaEventPublisher, StatisticsPublisher {
@@ -27,30 +26,32 @@ public class ConsoleAdapter implements ArenaEventPublisher, StatisticsPublisher 
 	public void publish(ArenaEvent arenaEvent) {
 		// still waiting for Pattern matching on sealed interface !
 		if (arenaEvent instanceof ArenaEvent.ArenaCompletedEvent arenaCompleted) {
-			arenaCompleted(arenaCompleted.arena());
+			final List<String> winners = arenaCompleted.survivors()
+					.stream()
+					.map(ArenaEvent.Human::name)
+					.collect(Collectors.toList());
+			arenaCompleted(arenaCompleted.nbOfRoundExecuted(), winners);
 		} else if (arenaEvent instanceof ArenaEvent.ArenaCreatedEvent arenaInitialized) {
-			arenaInitialized(arenaInitialized.arena());
+			arenaInitialized(arenaInitialized.arenaId(), arenaInitialized.maxSize());
 		} else if (arenaEvent instanceof ArenaEvent.RoundCompletedEvent roundCompleted) {
 			roundCompleted(roundCompleted.round());
 		} else if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent humanJoinedArenaEvent) {
-			humanJoinedArena(humanJoinedArenaEvent.arenaId(), humanJoinedArenaEvent.fighter());
+			humanJoinedArena(humanJoinedArenaEvent.arenaId(), humanJoinedArenaEvent.fighter().name());
 		} else {
 			throw new IllegalStateException("Unexpected event type: " + arenaEvent);
 		}
 	}
 
-	public void arenaInitialized(Arena arena) {
-		logger.info("A new Arena has been created: id='{}', maxSize={}", arena.id(), arena.maxSize());
+
+	public void arenaInitialized(ArenaId arenaId, int maxSize) {
+		logger.info("A new Arena has been created: id='{}', maxSize={}", arenaId, maxSize);
 	}
 
-	public void arenaCompleted(Arena arena) {
-		final List<String> winners = arena.getSurvivors().stream()
-				.map(human -> human.name)
-				.collect(Collectors.toList());
+	public void arenaCompleted(int nbOfRoundExecuted, List<String> winners) {
 		if (winners.size() == 1) {
-			logger.info("At then end of round {}, the winner is: {}", arena.getNbOfRoundExecuted(), winners);
+			logger.info("At then end of round {}, the winner is: {}", nbOfRoundExecuted, winners);
 		} else {
-			logger.info("At then end of round {}, there are {} survivors: {}", arena.getNbOfRoundExecuted(), winners.size(), winners);
+			logger.info("At then end of round {}, there are {} survivors: {}", nbOfRoundExecuted, winners.size(), winners);
 		}
 	}
 
@@ -94,22 +95,22 @@ public class ConsoleAdapter implements ArenaEventPublisher, StatisticsPublisher 
 				defender.isAlive() ? "" : " (dead)");
 	}
 
-	public void humanJoinedArena(UUID arenaId, Human fighter) {
-		logger.info("[Arena:'{}'] New fighter joined Arena: {}", arenaId, fighter);
+	public void humanJoinedArena(ArenaId arenaId, String fighterName) {
+		logger.info("[Arena:'{}'] New fighter joined Arena: {}", arenaId, fighterName);
 	}
 
 
 	@Override
 	public void publish(StatisticsEvent event) {
 		if (event instanceof StatisticsEvent.ArenaStatisticsEvent arenaStatisticsEvent) {
-			Map<UUID, FighterStatistics> stats = arenaStatisticsEvent.fighterStatistics();
+			Map<HumanId, FighterStatistics> stats = arenaStatisticsEvent.fighterStatistics();
 			stats.values().stream()
 					.filter(o -> o.getStat(FighterStatistics.FighterStatType.SURVIVOR).value() > 0)
-					.forEach(fighterStatistics -> logger.info("Stats of survivor {}: {}", fighterStatistics.fighter.name, buildSummary(fighterStatistics)));
+					.forEach(fighterStatistics -> logger.info("Stats of survivor {}: {}", fighterStatistics.name, buildSummary(fighterStatistics)));
 
 			stats.values().stream()
 					.max(Comparator.comparingInt(o -> o.getStat(FighterStatistics.FighterStatType.KILL).value()))
-					.ifPresent(fighterStatistics -> logger.info("Stats of Best Killer {}: {}", fighterStatistics.fighter.name, buildSummary(fighterStatistics)));
+					.ifPresent(fighterStatistics -> logger.info("Stats of Best Killer {}: {}", fighterStatistics.name, buildSummary(fighterStatistics)));
 		}
 	}
 

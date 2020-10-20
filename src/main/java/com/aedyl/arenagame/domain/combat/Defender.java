@@ -2,10 +2,9 @@ package com.aedyl.arenagame.domain.combat;
 
 import com.aedyl.arenagame.domain.characteristics.Characteristics;
 import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.HumanId;
 
-import java.util.UUID;
-
-public record Defender(UUID id,
+public record Defender(HumanId id,
                        String name,
                        Characteristics characteristics) implements Fighter {
 

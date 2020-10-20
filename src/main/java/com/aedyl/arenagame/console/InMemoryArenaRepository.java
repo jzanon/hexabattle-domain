@@ -1,15 +1,15 @@
 package com.aedyl.arenagame.console;
 
-import com.aedyl.arenagame.domain.arena.Arena;
-import com.aedyl.arenagame.domain.arena.ArenaRepository;
+import com.aedyl.arenagame.domain.arena.model.Arena;
+import com.aedyl.arenagame.domain.arena.model.ArenaId;
+import com.aedyl.arenagame.domain.arena.port.output.ArenaRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 public class InMemoryArenaRepository implements ArenaRepository {
-	private final Map<UUID, Arena> arenaMap = new HashMap<>();
+	private final Map<ArenaId, Arena> arenaMap = new HashMap<>();
 
 	@Override
 	public void save(Arena arena) {
@@ -17,7 +17,7 @@ public class InMemoryArenaRepository implements ArenaRepository {
 	}
 
 	@Override
-	public Optional<Arena> findById(UUID arenaId) {
+	public Optional<Arena> findById(ArenaId arenaId) {
 		return Optional.ofNullable(arenaMap.get(arenaId));
 	}
 }

@@ -7,8 +7,6 @@ import com.aedyl.arenagame.domain.combat.AttackResolver;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class HumanTest {
@@ -34,17 +32,17 @@ class HumanTest {
 		Human humanWithSameId = new Human(human.uniqueId, "Another name", randomCharacteristicsSupplier.get(), enemyChooser, new AttackResolver());
 		assertEquals(human, humanWithSameId);
 
-		Human humanWithDifferentId = new Human(UUID.randomUUID(), human.name, human.getCharacteristics(), enemyChooser, new AttackResolver());
+		Human humanWithDifferentId = new Human(HumanId.randomId(), human.name, human.getCharacteristics(), enemyChooser, new AttackResolver());
 		assertNotEquals(human, humanWithDifferentId);
 	}
 
 	@Test
 	void isAlive() {
 		final EnemyChooser enemyChooser = new EnemyChooser();
-		Human human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 7, 9, Trait.MERCIFUL, Trait.APATHETIC), enemyChooser, new AttackResolver());
+		Human human = new Human(HumanId.randomId(), "Plop", new Characteristics(5, 7, 7, 9, Trait.MERCIFUL, Trait.APATHETIC), enemyChooser, new AttackResolver());
 		assertTrue(human.isAlive());
 
-		human = new Human(UUID.randomUUID(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), enemyChooser, new AttackResolver());
+		human = new Human(HumanId.randomId(), "Plop", new Characteristics(5, 7, 0, 9, Trait.MERCIFUL, Trait.PASSIONATE), enemyChooser, new AttackResolver());
 		assertFalse(human.isAlive());
 	}
 

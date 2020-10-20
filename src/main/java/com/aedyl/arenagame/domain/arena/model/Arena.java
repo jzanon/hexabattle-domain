@@ -1,5 +1,6 @@
-package com.aedyl.arenagame.domain.arena;
+package com.aedyl.arenagame.domain.arena.model;
 
+import com.aedyl.arenagame.domain.arena.ArenaStatus;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.combat.Round;
 import com.aedyl.arenagame.domain.fighter.Human;
@@ -8,14 +9,13 @@ import com.aedyl.arenagame.domain.fighter.HumanComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Arena {
 
 	private static final int DEFAULT_MAX_SIZE = 100;
 	private static final int DEFAULT_NB_ROUND_MAX = 20;
-	private final UUID id;
+	private final ArenaId id;
 	private List<Human> survivors = new ArrayList<>();
 	private int nbOfRoundExecuted = 0;
 	private final int maxSize;
@@ -23,14 +23,14 @@ public class Arena {
 	private ArenaStatus status;
 
 	public Arena() {
-		this.id = UUID.randomUUID();
+		this.id = ArenaId.randomId();
 		this.maxSize = DEFAULT_MAX_SIZE;
 		this.nbRoundMax = DEFAULT_NB_ROUND_MAX;
 		status = ArenaStatus.CREATED;
 	}
 
 	public Arena(int maxSize, int nbRoundMax) {
-		this.id = UUID.randomUUID();
+		this.id = ArenaId.randomId();
 		this.maxSize = maxSize;
 		this.nbRoundMax = nbRoundMax;
 		status = ArenaStatus.CREATED;
@@ -87,7 +87,7 @@ public class Arena {
 		return maxSize;
 	}
 
-	public UUID id() {
+	public ArenaId id() {
 		return id;
 	}
 

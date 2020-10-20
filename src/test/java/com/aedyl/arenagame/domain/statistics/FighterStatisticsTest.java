@@ -4,6 +4,7 @@ import com.aedyl.arenagame.domain.HumanBuilder;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.HumanId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class FighterStatisticsTest {
 
 		var battleScenario = buildBattleScenario(attacker, defender);
 
-		FighterStatistics statistics = new FighterStatistics(attacker);
+		FighterStatistics statistics = new FighterStatistics(attacker.uniqueId, attacker.name);
 		for (AttackResult attackResult : battleScenario) {
 			statistics.updateAttacker(attackResult);
 		}
@@ -67,7 +68,7 @@ class FighterStatisticsTest {
 
 		var battleScenario = buildBattleScenario(attacker, defender);
 
-		FighterStatistics statistics = new FighterStatistics(defender);
+		FighterStatistics statistics = new FighterStatistics(defender.uniqueId, defender.name);
 		for (AttackResult attackResult : battleScenario) {
 			statistics.updateDefender(attackResult);
 		}
@@ -87,7 +88,7 @@ class FighterStatisticsTest {
 
 	@Test
 	void survived() {
-		FighterStatistics statistics = new FighterStatistics(new HumanBuilder().build());
+		FighterStatistics statistics = new FighterStatistics(HumanId.randomId(), "");
 		checkStat(statistics.getStats(), FighterStatistics.FighterStatType.SURVIVOR, 0);
 		statistics.survived();
 		checkStat(statistics.getStats(), FighterStatistics.FighterStatType.SURVIVOR, 1);

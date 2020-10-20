@@ -1,7 +1,7 @@
 package com.aedyl.arenagame.domain.statistics;
 
 import com.aedyl.arenagame.domain.combat.AttackResult;
-import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.HumanId;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class FighterStatistics {
-	public final Human fighter;
+	public final HumanId fighterId;
+	public final String name;
 	private final Map<FighterStatType, FighterStatistic> stats = new HashMap<>();
 
 
@@ -17,8 +18,9 @@ public class FighterStatistics {
 		KILL, ATTACK, DEFENSE, MISS, DEATH, HIT_SUM, SUFFERED_HIT_SUM, NO_ENEMY_FOUND, SURVIVOR
 	}
 
-	public FighterStatistics(Human fighter) {
-		this.fighter = fighter;
+	public FighterStatistics(HumanId fighterId, String name) {
+		this.fighterId = fighterId;
+		this.name = name;
 		for (FighterStatType statType : FighterStatType.values()) {
 			stats.put(statType, new FighterStatistic(statType, 0));
 		}
@@ -33,12 +35,9 @@ public class FighterStatistics {
 					stats.compute(FighterStatType.KILL, sumStatUpdater(1));
 				}
 			}
-			case MISSED -> {
-				stats.compute(FighterStatType.MISS, sumStatUpdater(1));
-			}
-			case NO_ENEMY_FOUND -> {
-				stats.compute(FighterStatType.NO_ENEMY_FOUND, sumStatUpdater(1));
-			}
+			case MISSED -> stats.compute(FighterStatType.MISS, sumStatUpdater(1));
+			case NO_ENEMY_FOUND -> stats.compute(FighterStatType.NO_ENEMY_FOUND, sumStatUpdater(1));
+			default -> throw new IllegalStateException("Unexpected value: " + attackResult.status());
 		}
 		return stats.values();
 	}

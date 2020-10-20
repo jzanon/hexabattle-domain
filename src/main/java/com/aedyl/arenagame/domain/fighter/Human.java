@@ -1,26 +1,25 @@
 package com.aedyl.arenagame.domain.fighter;
 
 import com.aedyl.arenagame.domain.characteristics.Characteristics;
-import com.aedyl.arenagame.domain.combat.AttackResult;
-import com.aedyl.arenagame.domain.combat.AttackStatus;
 import com.aedyl.arenagame.domain.characteristics.HumanMemory;
 import com.aedyl.arenagame.domain.combat.AttackResolver;
+import com.aedyl.arenagame.domain.combat.AttackResult;
+import com.aedyl.arenagame.domain.combat.AttackStatus;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 public class Human {
 
-	public final UUID uniqueId;
+	public final HumanId uniqueId;
 	public final String name;
 	private Characteristics characteristics;
 	private final EnemyChooser enemyChooser;
 	private final AttackResolver attackResolver;
 	private final HumanMemory memory = new HumanMemory();
 
-	public Human(UUID uniqueId,
+	public Human(HumanId uniqueId,
 	             String name,
 	             Characteristics characteristics,
 	             EnemyChooser enemyChooser,
@@ -50,7 +49,7 @@ public class Human {
 		return "Human{" +
 				"name='" + name +
 				"', traits='" + characteristics.primary() + "','" + characteristics.secondary() + "'" +
-				", life="+characteristics.life()+"/"+characteristics.maxLife()+
+				", life=" + characteristics.life() + "/" + characteristics.maxLife() +
 				"}";
 	}
 

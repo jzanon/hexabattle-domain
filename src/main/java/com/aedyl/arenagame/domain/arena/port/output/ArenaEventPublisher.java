@@ -1,4 +1,4 @@
-package com.aedyl.arenagame.domain.arena;
+package com.aedyl.arenagame.domain.arena.port.output;
 
 public interface ArenaEventPublisher {
 

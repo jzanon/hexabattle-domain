@@ -2,10 +2,6 @@ package com.aedyl.arenagame.domain.fighter;
 
 import com.aedyl.arenagame.domain.HumanFactoryForTests;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
-import com.aedyl.arenagame.domain.fighter.Human;
-import com.aedyl.arenagame.domain.fighter.HumanComparator;
-import com.aedyl.arenagame.domain.fighter.HumanSupplier;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,7 +27,7 @@ class HumanComparatorTest {
 		);
 	}
 
-	@ParameterizedTest(name="#{index} - Test initiative comparison with Argument={0},{1}")
+	@ParameterizedTest(name = "#{index} - Test initiative comparison with Argument={0},{1}")
 	@MethodSource("provideInitiativesForComparison")
 	void compareByInitiative(int firstInit, int secondInit) {
 		final Human human1 = factory.createHuman((CharacteristicsSupplier.InitiativeSupplier) () -> firstInit);
