@@ -20,23 +20,29 @@ public class Arena {
 	private int nbOfRoundExecuted = 0;
 	private final int maxSize;
 	private final int nbRoundMax;
-	private boolean finished;
+	private ArenaStatus status;
 
 	public Arena() {
 		this.id = UUID.randomUUID();
 		this.maxSize = DEFAULT_MAX_SIZE;
 		this.nbRoundMax = DEFAULT_NB_ROUND_MAX;
+		status = ArenaStatus.CREATED;
 	}
 
 	public Arena(int maxSize, int nbRoundMax) {
 		this.id = UUID.randomUUID();
 		this.maxSize = maxSize;
 		this.nbRoundMax = nbRoundMax;
+		status = ArenaStatus.CREATED;
 	}
 
 	public Round roundTick() {
+		status = ArenaStatus.RUNNING_ROUND;
 		nbOfRoundExecuted++;
 		if (notEnoughFighters()) {
+			if (isFinished()) {
+				status = ArenaStatus.FINISHED;
+			}
 			return new Round(nbOfRoundExecuted, Collections.emptyList());
 		}
 		final List<AttackResult> attackResults = survivors.stream()
@@ -46,6 +52,10 @@ public class Arena {
 				.collect(Collectors.toList());
 
 		survivors = survivors.stream().filter(Human::isAlive).collect(Collectors.toList());
+
+		if (isFinished()) {
+			status = ArenaStatus.FINISHED;
+		}
 
 		return new Round(nbOfRoundExecuted, attackResults);
 	}
@@ -62,8 +72,15 @@ public class Arena {
 		return survivors.size() <= 1;
 	}
 
-	public void addFighter(Human fighter) {
+	public boolean addFighter(Human fighter) {
+		if (survivors.size() >= maxSize) {
+			return false;
+		}
 		survivors.add(fighter);
+		if (survivors.size() >= maxSize) {
+			status = ArenaStatus.FILLED;
+		}
+		return true;
 	}
 
 	public int maxSize() {
@@ -78,11 +95,12 @@ public class Arena {
 		return nbRoundMax;
 	}
 
-	public void markFinished() {
-		this.finished = true;
+	private boolean isFinished() {
+		return notEnoughFighters()
+				|| getNbOfRoundExecuted() >= nbRoundMax();
 	}
 
-	public boolean isFinished() {
-		return finished;
+	public ArenaStatus getStatus() {
+		return status;
 	}
 }

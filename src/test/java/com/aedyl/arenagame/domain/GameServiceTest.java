@@ -1,9 +1,6 @@
 package com.aedyl.arenagame.domain;
 
-import com.aedyl.arenagame.domain.arena.Arena;
-import com.aedyl.arenagame.domain.arena.ArenaEvent;
-import com.aedyl.arenagame.domain.arena.ArenaEventPublisher;
-import com.aedyl.arenagame.domain.arena.ArenaRepository;
+import com.aedyl.arenagame.domain.arena.*;
 import com.aedyl.arenagame.domain.fighter.Human;
 import com.aedyl.arenagame.domain.fighter.HumanSupplier;
 import org.junit.jupiter.api.Test;
@@ -37,7 +34,7 @@ class GameServiceTest {
 		assertEquals(0, arena.getNbOfRoundExecuted());
 		assertEquals(0, arena.getSurvivors().size());
 		assertTrue(arena.notEnoughFighters());
-		assertFalse(arena.isFinished());
+		assertEquals(ArenaStatus.CREATED, arena.getStatus());
 	}
 
 	@Test
@@ -111,9 +108,7 @@ class GameServiceTest {
 		});
 
 
-		assertThrows(NoSuchElementException.class, () -> {
-			gameService.fillArenaWithRandomFighters(UUID.fromString("59a33f0e-752a-4d72-bde2-781ceedd7d7c"));
-		});
+		assertThrows(NoSuchElementException.class, () -> gameService.fillArenaWithRandomFighters(UUID.fromString("59a33f0e-752a-4d72-bde2-781ceedd7d7c")));
 	}
 
 	@Test

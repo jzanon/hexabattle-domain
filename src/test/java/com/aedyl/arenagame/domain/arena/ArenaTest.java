@@ -21,12 +21,22 @@ class ArenaTest {
 
 
 	@Test
-	void markAsFinished() {
-		Arena arena = new Arena(2, 6);
-		assertFalse(arena.isFinished());
+	void arenaMaxSizeReached() {
+		final Human fighter1 = factory.createRandomHuman();
+		final Human fighter2 = factory.createRandomHuman();
+		final Human fighter3 = factory.createRandomHuman();
 
-		arena.markFinished();
-		assertTrue(arena.isFinished());
+		Arena arena = new Arena(2, 1);
+		assertEquals(ArenaStatus.CREATED, arena.getStatus());
+
+		assertTrue(arena.addFighter(fighter1));
+		assertEquals(ArenaStatus.CREATED, arena.getStatus());
+
+		assertTrue(arena.addFighter(fighter2));
+		assertEquals(ArenaStatus.FILLED, arena.getStatus());
+
+		assertFalse(arena.addFighter(fighter3));
+		assertEquals(ArenaStatus.FILLED, arena.getStatus());
 	}
 
 
@@ -46,7 +56,7 @@ class ArenaTest {
 		});
 
 		assertEquals(6, arena.getNbOfRoundExecuted());
-		assertFalse(arena.isFinished());
+		assertEquals(ArenaStatus.FINISHED, arena.getStatus());
 		assertEquals(2, arena.getSurvivors().size());
 	}
 
@@ -84,7 +94,7 @@ class ArenaTest {
 		arena.roundTick();
 
 		assertEquals(1, arena.getNbOfRoundExecuted());
-		assertFalse(arena.isFinished());
+		assertEquals(ArenaStatus.FINISHED, arena.getStatus());
 		assertEquals(1, arena.getSurvivors().size());
 		assertSame(fighterWithHighInit, arena.getSurvivors().get(0));
 	}
@@ -98,7 +108,7 @@ class ArenaTest {
 		arena.addFighter(fighter);
 		final Round round = arena.roundTick();
 
-		assertFalse(arena.isFinished());
+		assertEquals(ArenaStatus.FINISHED, arena.getStatus());
 		assertEquals(1, arena.getSurvivors().size());
 		assertSame(fighter, arena.getSurvivors().get(0));
 		assertEquals(1, round.number());

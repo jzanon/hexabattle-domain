@@ -1,9 +1,6 @@
 package com.aedyl.arenagame.domain;
 
-import com.aedyl.arenagame.domain.arena.Arena;
-import com.aedyl.arenagame.domain.arena.ArenaEvent;
-import com.aedyl.arenagame.domain.arena.ArenaEventPublisher;
-import com.aedyl.arenagame.domain.arena.ArenaRepository;
+import com.aedyl.arenagame.domain.arena.*;
 import com.aedyl.arenagame.domain.combat.Round;
 import com.aedyl.arenagame.domain.fighter.Human;
 
@@ -56,22 +53,15 @@ public class GameService {
 	public Future<Void> run(UUID arenaId) {
 		final Supplier<Void> arenaRunner = () -> {
 			Arena arena = arenaRepository.findById(arenaId).orElseThrow();
-			while (!isCompleted(arena)) {
+			while (!arena.getStatus().equals(ArenaStatus.FINISHED)) {
 				final Round round = arena.roundTick();
 				arenaEventPublisher.publish(ArenaEvent.RoundCompletedEvent.from(round));
 			}
-			arena.markFinished();
 			arenaRepository.save(arena);
 			arenaEventPublisher.publish(ArenaEvent.ArenaCompletedEvent.from(arena));
 			return null;
 		};
 		return CompletableFuture.supplyAsync(arenaRunner);
 	}
-
-	private boolean isCompleted(Arena arena) {
-		return arena.notEnoughFighters()
-				|| arena.getNbOfRoundExecuted() >= arena.nbRoundMax();
-	}
-
 
 }
