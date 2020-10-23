@@ -18,9 +18,11 @@ public class Main {
 		final int numberOfFighter = 1000;
 		final int nbRoundMax = 25;
 
+		final InMemoryRepository arenaRepository = new InMemoryRepository();
+
 		ConsoleAdapter consoleAdapter = new ConsoleAdapter();
 
-		StatisticsService statisticsService = new StatisticsService(consoleAdapter);
+		StatisticsService statisticsService = new StatisticsService(consoleAdapter, arenaRepository);
 
 		StatisticsAdapter statisticsAdapter = new StatisticsAdapter(statisticsService);
 
@@ -29,7 +31,7 @@ public class Main {
 			statisticsAdapter.publish(arenaEvent);
 		};
 
-		ArenaCommandHandler arenaService = new ArenaService(arenaEventPublisher, new InMemoryArenaRepository());
+		ArenaCommandHandler arenaService = new ArenaService(arenaEventPublisher, arenaRepository);
 
 		final Arena arena = arenaService.handle(ArenaCommandHandler.CreateArenaCommand.create(numberOfFighter, nbRoundMax));
 

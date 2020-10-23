@@ -1,6 +1,7 @@
 package com.aedyl.arenagame.domain.statistics;
 
 import com.aedyl.arenagame.domain.HumanBuilder;
+import com.aedyl.arenagame.domain.arena.model.ArenaId;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.fighter.Human;
@@ -25,7 +26,7 @@ class FighterStatisticsTest {
 
 		var battleScenario = buildBattleScenario(attacker, defender);
 
-		FighterStatistics statistics = new FighterStatistics(attacker.uniqueId, attacker.name);
+		FighterStatistics statistics = new FighterStatistics(ArenaId.randomId(), attacker.uniqueId, attacker.name);
 		for (AttackResult attackResult : battleScenario) {
 			statistics.updateAttacker(attackResult);
 		}
@@ -70,7 +71,7 @@ class FighterStatisticsTest {
 
 		var battleScenario = buildBattleScenario(attacker, defender);
 
-		FighterStatistics statistics = new FighterStatistics(defender.uniqueId, defender.name);
+		FighterStatistics statistics = new FighterStatistics(ArenaId.randomId(), defender.uniqueId, defender.name);
 		for (AttackResult attackResult : battleScenario) {
 			statistics.updateDefender(attackResult);
 		}
@@ -90,7 +91,7 @@ class FighterStatisticsTest {
 
 	@Test
 	void survived() {
-		FighterStatistics statistics = new FighterStatistics(HumanId.randomId(), "");
+		FighterStatistics statistics = new FighterStatistics(ArenaId.randomId(), HumanId.randomId(), "");
 		checkStat(statistics.getStats(), FighterStatistics.FighterStatType.SURVIVOR, 0);
 		statistics.survived();
 		checkStat(statistics.getStats(), FighterStatistics.FighterStatType.SURVIVOR, 1);

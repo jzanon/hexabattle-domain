@@ -6,16 +6,15 @@ import com.aedyl.arenagame.domain.arena.port.output.ArenaEventPublisher;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.combat.Defender;
 import com.aedyl.arenagame.domain.combat.Round;
-import com.aedyl.arenagame.domain.fighter.HumanId;
 import com.aedyl.arenagame.domain.statistics.model.FighterStatistics;
 import com.aedyl.arenagame.domain.statistics.port.output.StatisticsEvent;
 import com.aedyl.arenagame.domain.statistics.port.output.StatisticsPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConsoleAdapter implements ArenaEventPublisher, StatisticsPublisher {
@@ -103,14 +102,14 @@ public class ConsoleAdapter implements ArenaEventPublisher, StatisticsPublisher 
 	@Override
 	public void publish(StatisticsEvent event) {
 		if (event instanceof StatisticsEvent.ArenaStatisticsEvent arenaStatisticsEvent) {
-			Map<HumanId, FighterStatistics> stats = arenaStatisticsEvent.fighterStatistics();
-			stats.values().stream()
+			final Collection<FighterStatistics> statistics = arenaStatisticsEvent.fighterStatistics();
+			statistics.stream()
 					.filter(o -> o.getStat(FighterStatistics.FighterStatType.SURVIVOR).value() > 0)
-					.forEach(fighterStatistics -> logger.info("Stats of survivor {}: {}", fighterStatistics.name, buildSummary(fighterStatistics)));
+					.forEach(fighterStatistics -> logger.info("[Arena:'{}'] Stats of survivor {}: {}", arenaStatisticsEvent.arenaId(), fighterStatistics.name, buildSummary(fighterStatistics)));
 
-			stats.values().stream()
+			statistics.stream()
 					.max(Comparator.comparingInt(o -> o.getStat(FighterStatistics.FighterStatType.KILL).value()))
-					.ifPresent(fighterStatistics -> logger.info("Stats of Best Killer {}: {}", fighterStatistics.name, buildSummary(fighterStatistics)));
+					.ifPresent(fighterStatistics -> logger.info("[Arena:'{}'] Stats of Best Killer {}: {}", arenaStatisticsEvent.arenaId(), fighterStatistics.name, buildSummary(fighterStatistics)));
 		}
 	}
 

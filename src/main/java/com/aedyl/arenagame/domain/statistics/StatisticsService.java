@@ -6,44 +6,62 @@ import com.aedyl.arenagame.domain.combat.Attacker;
 import com.aedyl.arenagame.domain.combat.Defender;
 import com.aedyl.arenagame.domain.combat.Round;
 import com.aedyl.arenagame.domain.fighter.HumanId;
+import com.aedyl.arenagame.domain.statistics.model.ArenaStatistics;
 import com.aedyl.arenagame.domain.statistics.model.FighterStatistics;
 import com.aedyl.arenagame.domain.statistics.port.output.StatisticsEvent;
+import com.aedyl.arenagame.domain.statistics.port.output.StatisticsEvent.FighterStatsUpdated;
 import com.aedyl.arenagame.domain.statistics.port.output.StatisticsPublisher;
+import com.aedyl.arenagame.domain.statistics.port.output.StatisticsRepository;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class StatisticsService {
 
 	private final StatisticsPublisher publisher;
-	private final Map<HumanId, FighterStatistics> statistics = new HashMap<>();
+	private final StatisticsRepository repository;
 
-	public StatisticsService(StatisticsPublisher publisher) {
+	public StatisticsService(StatisticsPublisher publisher, StatisticsRepository repository) {
 		this.publisher = publisher;
+		this.repository = repository;
 	}
 
-	public void roundCompleted(Round round) {
+	public void roundCompleted(ArenaId arenaId, Round round) {
+		ArenaStatistics arenaStatistics = repository.find(arenaId).orElseThrow();
 		for (AttackResult attackResult : round.stats()) {
 			final Attacker attacker = attackResult.assailant();
-			statistics.get(attacker.id()).updateAttacker(attackResult);
+			final FighterStatistics attackerStats = arenaStatistics.updateAttacker(attacker.id(), attackResult);
+			publisher.publish(FighterStatsUpdated.from(attackerStats));
 			final Defender defender = attackResult.defender();
 			if (defender != null) {
-				statistics.get(defender.id()).updateDefender(attackResult);
+				final FighterStatistics defenderStats = arenaStatistics.updateDefender(defender.id(), attackResult);
+				publisher.publish(FighterStatsUpdated.from(defenderStats));
 			}
 		}
 
+		repository.save(arenaStatistics);
 	}
 
-	public void humanJoinedArena(HumanId humanId, String name) {
-		statistics.put(humanId, new FighterStatistics(humanId, name));
+	public void humanJoinedArena(ArenaId arenaId, HumanId humanId, String name) {
+		ArenaStatistics arenaStatistics = repository.find(arenaId).orElseThrow();
+		final FighterStatistics fighterStatistics = arenaStatistics.initializeStats(humanId, name);
+		publisher.publish(FighterStatsUpdated.from(fighterStatistics));
+		repository.save(fighterStatistics);
 	}
 
 
 	public void arenaCompleted(ArenaId arenaId, List<HumanId> survivorIds) {
-		survivorIds.forEach(survivorId -> statistics.get(survivorId).survived());
-		publisher.publish(StatisticsEvent.ArenaStatisticsEvent.from(arenaId, Collections.unmodifiableMap(statistics)));
+		ArenaStatistics arenaStatistics = repository.find(arenaId).orElseThrow();
+		survivorIds.forEach(survivorId -> {
+			final FighterStatistics fighterStatistics = arenaStatistics.get(survivorId);
+			fighterStatistics.survived();
+		});
+		repository.save(arenaStatistics);
+		publisher.publish(StatisticsEvent.ArenaStatisticsEvent.from(arenaStatistics));
 	}
 
+	public void initializeStatsForArena(ArenaId arenaId) {
+		ArenaStatistics arenaStatistics = new ArenaStatistics(arenaId);
+		repository.save(arenaStatistics);
+		publisher.publish(StatisticsEvent.ArenaStatisticsEvent.from(arenaStatistics));
+	}
 }

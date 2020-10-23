@@ -1,5 +1,6 @@
 package com.aedyl.arenagame.domain.statistics.model;
 
+import com.aedyl.arenagame.domain.arena.model.ArenaId;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.fighter.HumanId;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public class FighterStatistics {
+	public final ArenaId arenaId;
 	public final HumanId fighterId;
 	public final String name;
 	private final Map<FighterStatType, FighterStatistic> stats = new HashMap<>();
@@ -18,7 +20,8 @@ public class FighterStatistics {
 		KILL, ATTACK, DEFENSE, MISS, DEATH, HIT_SUM, SUFFERED_HIT_SUM, NO_ENEMY_FOUND, SURVIVOR
 	}
 
-	public FighterStatistics(HumanId fighterId, String name) {
+	public FighterStatistics(ArenaId arenaId, HumanId fighterId, String name) {
+		this.arenaId = arenaId;
 		this.fighterId = fighterId;
 		this.name = name;
 		for (FighterStatType statType : FighterStatType.values()) {

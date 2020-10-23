@@ -10,21 +10,23 @@ import java.util.stream.Collectors;
 
 public class StatisticsAdapter implements ArenaEventPublisher {
 
-	private final StatisticsService facade;
+	private final StatisticsService statisticsService;
 
-	public StatisticsAdapter(StatisticsService facade) {
-		this.facade = facade;
+	public StatisticsAdapter(StatisticsService statisticsService) {
+		this.statisticsService = statisticsService;
 	}
 
 	@Override
 	public void publish(ArenaEvent arenaEvent) {
-		if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent humanJoinedArenaEvent) {
-			facade.humanJoinedArena(humanJoinedArenaEvent.fighter().humanId(), humanJoinedArenaEvent.fighter().name());
+		if (arenaEvent instanceof ArenaEvent.ArenaCreatedEvent arenaCreatedEvent) {
+			statisticsService.initializeStatsForArena(arenaCreatedEvent.arenaId());
+		} else if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent humanJoinedArenaEvent) {
+			statisticsService.humanJoinedArena(humanJoinedArenaEvent.arenaId(), humanJoinedArenaEvent.fighter().humanId(), humanJoinedArenaEvent.fighter().name());
 		} else if (arenaEvent instanceof ArenaEvent.RoundCompletedEvent roundCompleted) {
-			facade.roundCompleted(roundCompleted.round());
+			statisticsService.roundCompleted(roundCompleted.arenaId(),roundCompleted.round());
 		} else if (arenaEvent instanceof ArenaEvent.ArenaCompletedEvent arenaCompletedEvent) {
 			final List<HumanId> survivorIds = arenaCompletedEvent.survivors().stream().map(ArenaEvent.Human::humanId).collect(Collectors.toList());
-			facade.arenaCompleted(arenaCompletedEvent.arenaId(), survivorIds);
+			statisticsService.arenaCompleted(arenaCompletedEvent.arenaId(), survivorIds);
 		}
 	}
 

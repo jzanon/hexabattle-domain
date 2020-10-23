@@ -42,9 +42,9 @@ public sealed interface ArenaEvent {
 		}
 	}
 
-	record RoundCompletedEvent(Instant createdAt, Round round) implements ArenaEvent {
-		public static RoundCompletedEvent from(Round round) {
-			return new RoundCompletedEvent(Instant.now(), round);
+	record RoundCompletedEvent(Instant createdAt, ArenaId arenaId, Round round) implements ArenaEvent {
+		public static RoundCompletedEvent from(ArenaId arenaId, Round round) {
+			return new RoundCompletedEvent(Instant.now(), arenaId, round);
 		}
 	}
 
