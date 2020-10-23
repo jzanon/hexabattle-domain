@@ -9,9 +9,8 @@ public class HumanMemory {
 	private Human lastHumanIAttacked;
 
 
-
 	public Optional<Human> getLastHumanWhoAttackedMe() {
-		return  Optional.ofNullable(lastHumanWhoAttackedMe);
+		return Optional.ofNullable(lastHumanWhoAttackedMe);
 	}
 
 	public HumanMemory setLastHumanWhoAttackedMe(Human lastHumanWhoAttackedMe) {

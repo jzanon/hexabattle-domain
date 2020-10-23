@@ -23,7 +23,7 @@ public class StatisticsAdapter implements ArenaEventPublisher {
 		} else if (arenaEvent instanceof ArenaEvent.HumanJoinedArenaEvent humanJoinedArenaEvent) {
 			statisticsService.humanJoinedArena(humanJoinedArenaEvent.arenaId(), humanJoinedArenaEvent.fighter().humanId(), humanJoinedArenaEvent.fighter().name());
 		} else if (arenaEvent instanceof ArenaEvent.RoundCompletedEvent roundCompleted) {
-			statisticsService.roundCompleted(roundCompleted.arenaId(),roundCompleted.round());
+			statisticsService.roundCompleted(roundCompleted.arenaId(), roundCompleted.round());
 		} else if (arenaEvent instanceof ArenaEvent.ArenaCompletedEvent arenaCompletedEvent) {
 			final List<HumanId> survivorIds = arenaCompletedEvent.survivors().stream().map(ArenaEvent.Human::humanId).collect(Collectors.toList());
 			statisticsService.arenaCompleted(arenaCompletedEvent.arenaId(), survivorIds);

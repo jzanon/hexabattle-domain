@@ -1,6 +1,5 @@
 package com.aedyl.arenagame.domain.combat;
 
-import com.aedyl.arenagame.domain.combat.AttackResolver;
 import com.aedyl.arenagame.domain.fighter.Human;
 
 public class AttackResolverWithoutRandom extends AttackResolver {

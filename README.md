@@ -1,8 +1,14 @@
 ![Maven build](https://github.com/jzanon/jdk15-test/workflows/Maven%20build/badge.svg)
 
-# Application template to play with Java features
-
 This project uses [Java Faker](http://dius.github.io/java-faker/) to creates its datasets.
+
+# Hexagonal architecture
+
+This project offers a business domain sample using hexagonal architecture.
+
+# Java features' playground
+
+Application template to play with Java features.
 
 ## Java 15: Records
 

@@ -34,7 +34,7 @@ public class InMemoryRepository implements ArenaRepository, StatisticsRepository
 
 	@Override
 	public void save(ArenaStatistics arenaStatistics) {
-		arenaStatsMap.put(arenaStatistics.arenaId,arenaStatistics);
+		arenaStatsMap.put(arenaStatistics.arenaId, arenaStatistics);
 	}
 
 	@Override
