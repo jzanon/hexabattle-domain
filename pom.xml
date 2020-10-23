@@ -16,11 +16,13 @@
     </properties>
 
     <dependencies>
+        <!-- Data generation -->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>1.0.2</version>
         </dependency>
+        <!-- Logs -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -31,6 +33,7 @@
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.0-alpha1</version>
         </dependency>
+        <!-- Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
