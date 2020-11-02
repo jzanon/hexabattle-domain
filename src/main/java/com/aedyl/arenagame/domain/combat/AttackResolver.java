@@ -1,6 +1,6 @@
 package com.aedyl.arenagame.domain.combat;
 
-import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.model.Human;
 
 import java.util.Random;
 

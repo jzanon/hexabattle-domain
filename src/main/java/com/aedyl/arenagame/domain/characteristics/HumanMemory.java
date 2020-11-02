@@ -1,6 +1,6 @@
 package com.aedyl.arenagame.domain.characteristics;
 
-import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.model.Human;
 
 import java.util.Optional;
 

@@ -3,8 +3,8 @@ package com.aedyl.arenagame.domain.arena.model;
 import com.aedyl.arenagame.domain.arena.ArenaStatus;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.combat.Round;
-import com.aedyl.arenagame.domain.fighter.Human;
-import com.aedyl.arenagame.domain.fighter.HumanComparator;
+import com.aedyl.arenagame.domain.fighter.model.Human;
+import com.aedyl.arenagame.domain.fighter.model.HumanComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;

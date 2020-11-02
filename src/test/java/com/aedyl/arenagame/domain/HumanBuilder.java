@@ -3,9 +3,9 @@ package com.aedyl.arenagame.domain;
 import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.characteristics.Trait;
 import com.aedyl.arenagame.domain.combat.AttackResolver;
-import com.aedyl.arenagame.domain.fighter.EnemyChooser;
-import com.aedyl.arenagame.domain.fighter.Human;
-import com.aedyl.arenagame.domain.fighter.HumanSupplier;
+import com.aedyl.arenagame.domain.fighter.model.EnemyChooser;
+import com.aedyl.arenagame.domain.fighter.model.Human;
+import com.aedyl.arenagame.domain.fighter.model.HumanSupplier;
 
 import java.util.function.Function;
 

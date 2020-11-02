@@ -1,4 +1,4 @@
-package com.aedyl.arenagame.domain.fighter;
+package com.aedyl.arenagame.domain.fighter.model;
 
 import com.aedyl.arenagame.domain.characteristics.Characteristics;
 import com.aedyl.arenagame.domain.characteristics.HumanMemory;

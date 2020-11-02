@@ -1,4 +1,4 @@
-package com.aedyl.arenagame.domain.fighter;
+package com.aedyl.arenagame.domain.fighter.model;
 
 import java.util.UUID;
 

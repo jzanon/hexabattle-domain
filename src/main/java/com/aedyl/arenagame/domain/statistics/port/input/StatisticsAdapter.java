@@ -2,7 +2,7 @@ package com.aedyl.arenagame.domain.statistics.port.input;
 
 import com.aedyl.arenagame.domain.arena.port.output.ArenaEvent;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaEventPublisher;
-import com.aedyl.arenagame.domain.fighter.HumanId;
+import com.aedyl.arenagame.domain.fighter.model.HumanId;
 import com.aedyl.arenagame.domain.statistics.StatisticsService;
 
 import java.util.List;

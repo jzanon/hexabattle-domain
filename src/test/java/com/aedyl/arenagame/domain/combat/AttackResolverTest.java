@@ -2,10 +2,10 @@ package com.aedyl.arenagame.domain.combat;
 
 import com.aedyl.arenagame.domain.characteristics.Characteristics;
 import com.aedyl.arenagame.domain.characteristics.Trait;
-import com.aedyl.arenagame.domain.fighter.EnemyChooser;
-import com.aedyl.arenagame.domain.fighter.Human;
-import com.aedyl.arenagame.domain.fighter.HumanId;
-import com.aedyl.arenagame.domain.fighter.HumanSupplier;
+import com.aedyl.arenagame.domain.fighter.model.EnemyChooser;
+import com.aedyl.arenagame.domain.fighter.model.Human;
+import com.aedyl.arenagame.domain.fighter.model.HumanId;
+import com.aedyl.arenagame.domain.fighter.model.HumanSupplier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

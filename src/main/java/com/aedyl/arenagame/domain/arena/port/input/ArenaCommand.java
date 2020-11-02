@@ -1,7 +1,7 @@
 package com.aedyl.arenagame.domain.arena.port.input;
 
 import com.aedyl.arenagame.domain.arena.model.ArenaId;
-import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.model.HumanId;
 
 /**
  * Exposed commands to deal with arena management.
@@ -15,10 +15,10 @@ public interface ArenaCommand {
 		}
 	}
 
-	record AddFighterCommand(ArenaId arenaId, Human fighter) implements ArenaCommand {
+	record AddFighterCommand(ArenaId arenaId, HumanId fighterId) implements ArenaCommand {
 
-		public static AddFighterCommand create(ArenaId arenaId, Human fighter) {
-			return new AddFighterCommand(arenaId, fighter);
+		public static AddFighterCommand create(ArenaId arenaId, HumanId fighterId) {
+			return new AddFighterCommand(arenaId, fighterId);
 		}
 	}
 

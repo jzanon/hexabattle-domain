@@ -8,6 +8,7 @@ import com.aedyl.arenagame.domain.arena.port.input.ArenaCommand.RunArenaCommand;
 import com.aedyl.arenagame.domain.arena.port.input.ArenaCommandHandler;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaEventPublisher;
 import com.aedyl.arenagame.domain.fighter.FighterService;
+import com.aedyl.arenagame.domain.fighter.port.input.FghterCommand;
 import com.aedyl.arenagame.domain.statistics.StatisticsService;
 import com.aedyl.arenagame.domain.statistics.port.input.StatisticsAdapter;
 
@@ -21,11 +22,11 @@ public class Main {
 		final int numberOfFighter = 1000;
 		final int nbRoundMax = 25;
 
-		final InMemoryRepository arenaRepository = new InMemoryRepository();
+		final InMemoryRepository repository = new InMemoryRepository();
 
 		ConsoleAdapter consoleAdapter = new ConsoleAdapter();
 
-		StatisticsService statisticsService = new StatisticsService(consoleAdapter, arenaRepository);
+		StatisticsService statisticsService = new StatisticsService(consoleAdapter, repository);
 
 		StatisticsAdapter statisticsAdapter = new StatisticsAdapter(statisticsService);
 
@@ -34,14 +35,14 @@ public class Main {
 			statisticsAdapter.publish(arenaEvent);
 		};
 
-		ArenaCommandHandler arenaService = new ArenaService(arenaEventPublisher, arenaRepository);
+		ArenaCommandHandler arenaService = new ArenaService(arenaEventPublisher, repository, repository);
 
 		final Arena arena = arenaService.handle(CreateArenaCommand.create(numberOfFighter, nbRoundMax));
 
-		FighterService fighterService = new FighterService();
-		fighterService.createRandomFighters(arena.maxSize())
+		FighterService fighterService = new FighterService(repository);
+		fighterService.handle(FghterCommand.CreateRandomHumansCommand.create(arena.maxSize()))
 				.stream()
-				.map(fighter -> AddFighterCommand.create(arena.id(), fighter))
+				.map(fighterId -> AddFighterCommand.create(arena.id(), fighterId))
 				.forEach(arenaService::handle);
 
 		final Future<Void> run = arenaService.handle(RunArenaCommand.create(arena.id()));

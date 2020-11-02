@@ -3,7 +3,7 @@ package com.aedyl.arenagame.domain.arena.port.output;
 import com.aedyl.arenagame.domain.arena.model.Arena;
 import com.aedyl.arenagame.domain.arena.model.ArenaId;
 import com.aedyl.arenagame.domain.combat.Round;
-import com.aedyl.arenagame.domain.fighter.HumanId;
+import com.aedyl.arenagame.domain.fighter.model.HumanId;
 
 import java.time.Instant;
 import java.util.List;
@@ -18,7 +18,7 @@ public sealed interface ArenaEvent {
 	}
 
 	record Human(HumanId humanId, String name) {
-		public static Human from(com.aedyl.arenagame.domain.fighter.Human human) {
+		public static Human from(com.aedyl.arenagame.domain.fighter.model.Human human) {
 			return new Human(human.uniqueId, human.name);
 		}
 	}
@@ -37,7 +37,7 @@ public sealed interface ArenaEvent {
 	}
 
 	record HumanJoinedArenaEvent(Instant createdAt, ArenaId arenaId, Human fighter) implements ArenaEvent {
-		public static HumanJoinedArenaEvent from(ArenaId arenaId, com.aedyl.arenagame.domain.fighter.Human fighter) {
+		public static HumanJoinedArenaEvent from(ArenaId arenaId, com.aedyl.arenagame.domain.fighter.model.Human fighter) {
 			return new HumanJoinedArenaEvent(Instant.now(), arenaId, Human.from(fighter));
 		}
 	}

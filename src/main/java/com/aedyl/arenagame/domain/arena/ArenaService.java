@@ -10,7 +10,8 @@ import com.aedyl.arenagame.domain.arena.port.output.ArenaEvent;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaEventPublisher;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaRepository;
 import com.aedyl.arenagame.domain.combat.Round;
-import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.model.Human;
+import com.aedyl.arenagame.domain.fighter.port.output.HumanRepository;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
@@ -22,11 +23,14 @@ public class ArenaService implements ArenaCommandHandler {
 
 	private final ArenaEventPublisher arenaEventPublisher;
 	private final ArenaRepository arenaRepository;
+	private final HumanRepository humanRepository;
 
 	public ArenaService(ArenaEventPublisher arenaEventPublisher,
-	                    ArenaRepository arenaRepository) {
+	                    ArenaRepository arenaRepository,
+	                    HumanRepository humanRepository) {
 		this.arenaEventPublisher = arenaEventPublisher;
 		this.arenaRepository = arenaRepository;
+		this.humanRepository = humanRepository;
 	}
 
 
@@ -44,11 +48,15 @@ public class ArenaService implements ArenaCommandHandler {
 
 	@Override
 	public void handle(AddFighterCommand addFighterCommand) {
-		addFighter(addFighterCommand.arenaId(), addFighterCommand.fighter());
+		Arena arena = arenaRepository.findById(addFighterCommand.arenaId()).orElseThrow();
+		Human fighter = humanRepository.findById(addFighterCommand.fighterId()).orElseThrow();
+		addFighter(arena, fighter);
 	}
 
-	void addFighter(ArenaId arenaId, Human fighter) {
-		Arena arena = arenaRepository.findById(arenaId).orElseThrow();
+	void addFighter(Arena arena, Human fighter) {
+		if (arena == null || fighter == null) {
+			throw new IllegalArgumentException("Arena and fighter cannot be null");
+		}
 		arena.addFighter(fighter);
 		arenaRepository.save(arena);
 		arenaEventPublisher.publish(ArenaEvent.HumanJoinedArenaEvent.from(arena.id(), fighter));

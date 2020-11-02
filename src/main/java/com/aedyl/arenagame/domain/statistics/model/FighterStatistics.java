@@ -2,7 +2,7 @@ package com.aedyl.arenagame.domain.statistics.model;
 
 import com.aedyl.arenagame.domain.arena.model.ArenaId;
 import com.aedyl.arenagame.domain.combat.AttackResult;
-import com.aedyl.arenagame.domain.fighter.HumanId;
+import com.aedyl.arenagame.domain.fighter.model.HumanId;
 
 import java.util.Collection;
 import java.util.HashMap;

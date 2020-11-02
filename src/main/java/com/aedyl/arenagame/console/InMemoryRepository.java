@@ -3,6 +3,9 @@ package com.aedyl.arenagame.console;
 import com.aedyl.arenagame.domain.arena.model.Arena;
 import com.aedyl.arenagame.domain.arena.model.ArenaId;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaRepository;
+import com.aedyl.arenagame.domain.fighter.model.Human;
+import com.aedyl.arenagame.domain.fighter.model.HumanId;
+import com.aedyl.arenagame.domain.fighter.port.output.HumanRepository;
 import com.aedyl.arenagame.domain.statistics.model.ArenaStatistics;
 import com.aedyl.arenagame.domain.statistics.model.FighterStatistics;
 import com.aedyl.arenagame.domain.statistics.port.output.StatisticsRepository;
@@ -12,8 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class InMemoryRepository implements ArenaRepository, StatisticsRepository {
+public class InMemoryRepository implements ArenaRepository, StatisticsRepository, HumanRepository {
 	private final Map<ArenaId, Arena> arenaMap = new HashMap<>();
+	private final Map<HumanId, Human> humanMap = new HashMap<>();
 	private final Map<ArenaId, ArenaStatistics> arenaStatsMap = new HashMap<>();
 
 	@Override
@@ -44,5 +48,15 @@ public class InMemoryRepository implements ArenaRepository, StatisticsRepository
 			final Collection<FighterStatistics> statistics = arenaStatistics.getStatistics();
 			arenaStatsMap.put(arenaId, new ArenaStatistics(arenaId, statistics));
 		});
+	}
+
+	@Override
+	public void save(Human human) {
+		humanMap.put(human.uniqueId, human);
+	}
+
+	@Override
+	public Optional<Human> findById(HumanId humanId) {
+		return Optional.ofNullable(humanMap.get(humanId));
 	}
 }

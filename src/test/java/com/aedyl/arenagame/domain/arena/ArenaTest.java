@@ -7,8 +7,8 @@ import com.aedyl.arenagame.domain.characteristics.CharacteristicsSupplier;
 import com.aedyl.arenagame.domain.combat.AttackResolver;
 import com.aedyl.arenagame.domain.combat.AttackResult;
 import com.aedyl.arenagame.domain.combat.Round;
-import com.aedyl.arenagame.domain.fighter.EnemyChooser;
-import com.aedyl.arenagame.domain.fighter.Human;
+import com.aedyl.arenagame.domain.fighter.model.EnemyChooser;
+import com.aedyl.arenagame.domain.fighter.model.Human;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
