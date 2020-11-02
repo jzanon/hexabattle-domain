@@ -2,6 +2,9 @@ package com.aedyl.arenagame.console;
 
 import com.aedyl.arenagame.domain.arena.ArenaService;
 import com.aedyl.arenagame.domain.arena.model.Arena;
+import com.aedyl.arenagame.domain.arena.port.input.ArenaCommand.AddFighterCommand;
+import com.aedyl.arenagame.domain.arena.port.input.ArenaCommand.CreateArenaCommand;
+import com.aedyl.arenagame.domain.arena.port.input.ArenaCommand.RunArenaCommand;
 import com.aedyl.arenagame.domain.arena.port.input.ArenaCommandHandler;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaEventPublisher;
 import com.aedyl.arenagame.domain.fighter.FighterService;
@@ -33,15 +36,15 @@ public class Main {
 
 		ArenaCommandHandler arenaService = new ArenaService(arenaEventPublisher, arenaRepository);
 
-		final Arena arena = arenaService.handle(ArenaCommandHandler.CreateArenaCommand.create(numberOfFighter, nbRoundMax));
+		final Arena arena = arenaService.handle(CreateArenaCommand.create(numberOfFighter, nbRoundMax));
 
 		FighterService fighterService = new FighterService();
 		fighterService.createRandomFighters(arena.maxSize())
 				.stream()
-				.map(fighter -> ArenaCommandHandler.AddFighterCommand.create(arena.id(), fighter))
+				.map(fighter -> AddFighterCommand.create(arena.id(), fighter))
 				.forEach(arenaService::handle);
 
-		final Future<Void> run = arenaService.handle(ArenaCommandHandler.RunArenaCommand.create(arena.id()));
+		final Future<Void> run = arenaService.handle(RunArenaCommand.create(arena.id()));
 		run.get(2, TimeUnit.SECONDS);
 	}
 

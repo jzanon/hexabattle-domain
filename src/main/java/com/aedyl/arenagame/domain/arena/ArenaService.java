@@ -2,6 +2,9 @@ package com.aedyl.arenagame.domain.arena;
 
 import com.aedyl.arenagame.domain.arena.model.Arena;
 import com.aedyl.arenagame.domain.arena.model.ArenaId;
+import com.aedyl.arenagame.domain.arena.port.input.ArenaCommand.AddFighterCommand;
+import com.aedyl.arenagame.domain.arena.port.input.ArenaCommand.CreateArenaCommand;
+import com.aedyl.arenagame.domain.arena.port.input.ArenaCommand.RunArenaCommand;
 import com.aedyl.arenagame.domain.arena.port.input.ArenaCommandHandler;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaEvent;
 import com.aedyl.arenagame.domain.arena.port.output.ArenaEventPublisher;
