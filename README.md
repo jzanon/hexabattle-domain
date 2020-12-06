@@ -1,6 +1,6 @@
 ![Maven build](https://github.com/jzanon/jdk15-test/workflows/Maven%20build/badge.svg)
 
-This project uses [Java Faker](http://dius.github.io/java-faker/) to creates its datasets.
+This project uses [Java Faker](http://dius.github.io/java-faker/) to create its datasets.
 
 # Hexagonal architecture
 
