@@ -7,13 +7,12 @@ import com.aedyl.arenagame.domain.fighter.port.input.FghterCommand
 import com.aedyl.hexabattle.api.config.ServiceConfig
 import com.aedyl.hexabattle.api.dto.toArena
 import com.aedyl.hexabattle.api.dto.toFighterFromArena
-import com.fasterxml.jackson.annotation.JsonAutoDetect
 import io.javalin.Javalin
-import io.javalin.apibuilder.ApiBuilder.*
-import io.javalin.plugin.json.JavalinJackson
+import io.javalin.apibuilder.ApiBuilder.get
 import java.util.*
 
 fun main(args: Array<String>) {
+
 
     val numberOfFighter = 1000
     val nbRoundMax = 25
@@ -23,8 +22,6 @@ fun main(args: Array<String>) {
     val arenaService = config.arenaService
     val fighterService = config.fighterService
 
-JavalinJackson.defaultObjectMapper().visibilityChecker
-    .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
 
     val app = Javalin.create().apply {
         exception(Exception::class.java) { e, _ -> e.printStackTrace() }
@@ -34,13 +31,13 @@ JavalinJackson.defaultObjectMapper().visibilityChecker
     app.routes {
 
         // this redirect shouldn't be here, but readers have complained about the 404 for the root path
-        get("/") { it.redirect("/fighters") }
+        get("/") { it.redirect("/newArena") }
 
 
         get("/newArena") { ctx ->
             val arena = arenaService.handle(CreateArenaCommand.create(numberOfFighter, nbRoundMax))
             ctx.json(arena.toArena())
-            ctx.redirect("/fillArena/"+arena.id().id().toString())
+            ctx.redirect("/fillArena/" + arena.id().id().toString())
         }
 
         get("/fillArena/:arena-id") { ctx ->
@@ -49,9 +46,9 @@ JavalinJackson.defaultObjectMapper().visibilityChecker
 
             arenaOpt.ifPresentOrElse({ arena ->
                 fighterService.handle(FghterCommand.CreateRandomHumansCommand.create(arena.maxSize()))
-                        .stream()
-                        .map { fighterId: HumanId? -> AddFighterCommand.create(arena.id(), fighterId) }
-                        .forEach { addFighterCommand: AddFighterCommand? -> arenaService.handle(addFighterCommand) }
+                    .stream()
+                    .map { fighterId: HumanId? -> AddFighterCommand.create(arena.id(), fighterId) }
+                    .forEach { addFighterCommand: AddFighterCommand? -> arenaService.handle(addFighterCommand) }
                 ctx.json(arena.toArena())
             }, {
                 ctx.status(404)
