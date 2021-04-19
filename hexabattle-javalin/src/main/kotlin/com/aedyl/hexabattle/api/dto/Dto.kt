@@ -9,7 +9,7 @@ data class Arena(val id: String, val survivors: MutableList<FighterFromArena>, v
 
 
 fun com.aedyl.arenagame.domain.arena.model.Arena.toArena(): Arena {
-    return  Arena(id().toString(), survivors.toFighterFromArena(), status)
+    return  Arena(id().id().toString(), survivors.toFighterFromArena(), status)
 }
 
 fun List<Human>.toFighterFromArena(): MutableList<FighterFromArena> {
@@ -22,5 +22,5 @@ fun List<Human>.toFighterFromArena(): MutableList<FighterFromArena> {
 }
 
 private fun Human.toFighterFromArena(): FighterFromArena {
-    return FighterFromArena(uniqueId.toString(), name, characteristics)
+    return FighterFromArena(uniqueId.id().toString(), name, characteristics)
 }

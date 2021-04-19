@@ -73,6 +73,11 @@ public class ArenaService implements ArenaCommandHandler {
 			while (!arena.getStatus().equals(ArenaStatus.FINISHED)) {
 				final Round round = arena.roundTick();
 				arenaEventPublisher.publish(ArenaEvent.RoundCompletedEvent.from(arenaId, round));
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
 			}
 			arenaRepository.save(arena);
 			arenaEventPublisher.publish(ArenaEvent.ArenaCompletedEvent.from(arena));

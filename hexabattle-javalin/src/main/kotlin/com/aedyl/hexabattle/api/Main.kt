@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
     val app = Javalin.create().apply {
         exception(Exception::class.java) { e, _ -> e.printStackTrace() }
         error(404) { ctx -> ctx.json("not found") }
-    }.start(7000)
+    }.start(7003)
 
     app.routes {
 
