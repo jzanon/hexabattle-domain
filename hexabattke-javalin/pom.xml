@@ -15,7 +15,7 @@
     <name>Hexabattle over Javalin</name>
 
     <properties>
-        <kotlin.version>1.4.20</kotlin.version>
+        <kotlin.version>1.5.20</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
         <javalin.version>3.12.0</javalin.version>
         <!-- jackson 2.12.0 is minimal version to work with Records -->
